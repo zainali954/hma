@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import RouteChangeLoader from "@/components/RouteChangeLoader";
 
 export default function PublicLayout({
   children,
@@ -8,6 +9,7 @@ export default function PublicLayout({
 }) {
   return (
     <>
+      <RouteChangeLoader />
       <Header />
       <main className="flex-1">{children}</main>
 

@@ -1,17 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import RouteChangeLoader from "@/components/RouteChangeLoader";
+import { FiMenu } from "react-icons/fi";
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const pageTitles: Record<string, string> = {
+  "/admin":           "Dashboard",
+  "/admin/blog":      "Blog Posts",
+  "/admin/blog/new":  "New Post",
+  "/admin/settings":  "Settings",
+  "/admin/messages":  "Messages",
+};
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -19,11 +27,12 @@ export default function AdminLayout({
         if (!res.ok) throw new Error("Not authenticated");
         setAuthenticated(true);
       })
-      .catch(() => {
-        router.push("/login");
-      })
+      .catch(() => router.push("/login"))
       .finally(() => setLoading(false));
   }, [router]);
+
+  // Close drawer on route change
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   if (loading) {
     return (
@@ -38,11 +47,34 @@ export default function AdminLayout({
 
   if (!authenticated) return null;
 
+  const pageTitle = Object.entries(pageTitles).find(([key]) =>
+    key === pathname || pathname.startsWith(key + "/")
+  )?.[1] ?? "Admin";
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <AdminSidebar />
-      <div className="pl-64 transition-all duration-300">
-        <main className="p-8">{children}</main>
+      <RouteChangeLoader />
+      <AdminSidebar mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
+
+      {/* Content area — offset by sidebar on desktop */}
+      <div className="lg:pl-64 transition-all duration-300 flex flex-col min-h-screen">
+
+        {/* Mobile top bar */}
+        <header className="lg:hidden sticky top-0 z-30 bg-white border-b border-gray-200 flex items-center gap-4 px-4 py-3">
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="p-2 rounded-lg text-navy-900 hover:bg-gray-100 transition-colors"
+            aria-label="Open menu"
+          >
+            <FiMenu size={22} />
+          </button>
+          <img src="/logo.svg" alt="HMA" style={{ height: "32px", width: "auto" }} />
+          <span className="text-sm font-semibold text-navy-900 ml-auto">{pageTitle}</span>
+        </header>
+
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+          {children}
+        </main>
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import {
   FiEye,
   FiTrendingUp,
 } from "react-icons/fi";
+import Spinner from "@/components/Spinner";
 
 interface DashboardData {
   stats: {
@@ -48,13 +49,7 @@ export default function AdminDashboard() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-2 border-navy-900 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
+  if (loading) return <Spinner />;
 
   const statsCards = [
     {
@@ -84,39 +79,39 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5 sm:space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-navy-900">Dashboard</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-navy-900">Dashboard</h1>
         <p className="text-gray-500 text-sm mt-1">
           Welcome to HMAA Dubai admin panel
         </p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Stats Grid — 2 cols on mobile, 4 on desktop */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         {statsCards.map((card) => {
           const Icon = card.icon;
           return (
             <div
               key={card.label}
-              className="bg-white rounded-xl border border-gray-100 p-6 hover:shadow-lg transition-shadow"
+              className="bg-white rounded-xl border border-gray-100 p-4 sm:p-6 hover:shadow-lg transition-shadow"
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className={`w-10 h-10 rounded-lg ${card.color} flex items-center justify-center`}>
-                  <Icon size={20} />
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg ${card.color} flex items-center justify-center`}>
+                  <Icon size={18} />
                 </div>
-                <FiTrendingUp className="text-gray-300" size={20} />
+                <FiTrendingUp className="text-gray-300" size={16} />
               </div>
-              <p className="text-3xl font-bold text-navy-900">{card.value}</p>
-              <p className="text-sm text-gray-500 mt-1">{card.label}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-navy-900">{card.value}</p>
+              <p className="text-xs sm:text-sm text-gray-500 mt-1 leading-tight">{card.label}</p>
             </div>
           );
         })}
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         {/* Recent Posts */}
-        <div className="bg-white rounded-xl border border-gray-100 p-6">
+        <div className="bg-white rounded-xl border border-gray-100 p-4 sm:p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-bold text-navy-900">Recent Posts</h2>
             <Link
@@ -161,7 +156,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Recent Messages */}
-        <div className="bg-white rounded-xl border border-gray-100 p-6">
+        <div className="bg-white rounded-xl border border-gray-100 p-4 sm:p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-bold text-navy-900">Recent Messages</h2>
             <Link

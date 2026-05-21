@@ -65,9 +65,9 @@ export default function AdminMessagesPage() {
           <p className="text-gray-500">No messages yet</p>
         </div>
       ) : (
-        <div className="grid lg:grid-cols-2 gap-6">
-          {/* Messages List */}
-          <div className="bg-white rounded-xl border border-gray-100 divide-y divide-gray-50 max-h-[600px] overflow-y-auto">
+        <div className={`grid gap-6 ${selected ? "lg:grid-cols-2" : ""}`}>
+          {/* Messages List — hidden on mobile when a message is selected */}
+          <div className={`bg-white rounded-xl border border-gray-100 divide-y divide-gray-50 max-h-[600px] overflow-y-auto ${selected ? "hidden lg:block" : ""}`}>
             {messages.map((msg) => (
               <button
                 key={msg._id}
@@ -104,9 +104,16 @@ export default function AdminMessagesPage() {
           </div>
 
           {/* Message Detail */}
+          {selected && (
           <div className="bg-white rounded-xl border border-gray-100 p-6">
-            {selected ? (
               <div className="space-y-6">
+                {/* Mobile back button */}
+                <button
+                  onClick={() => setSelected(null)}
+                  className="lg:hidden flex items-center gap-2 text-sm text-navy-700 font-medium mb-2 -mt-2"
+                >
+                  ← Back to messages
+                </button>
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-bold text-navy-900">
                     {selected.subject || "No Subject"}
@@ -152,15 +159,18 @@ export default function AdminMessagesPage() {
                   </p>
                 </div>
               </div>
-            ) : (
+          </div>
+          )}
+
+          {/* Empty state on desktop when nothing selected */}
+          {!selected && (
+            <div className="hidden lg:flex bg-white rounded-xl border border-gray-100 p-6 items-center justify-center">
               <div className="text-center py-12">
                 <FiMail className="mx-auto text-gray-300 mb-4" size={48} />
-                <p className="text-gray-500 text-sm">
-                  Select a message to view
-                </p>
+                <p className="text-gray-500 text-sm">Select a message to view</p>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>
