@@ -4,13 +4,15 @@ import ContactForm from "@/components/ContactForm";
 import { FiMail, FiPhone, FiMapPin, FiClock, FiMessageCircle, FiBriefcase } from "react-icons/fi";
 
 export const metadata: Metadata = {
-  title: "Contact Us",
+  title: "Contact HMA Dubai | Free Business Setup Consultation",
   description:
-    "Professional Chartered Accountancy Service in Dubai UAE with 5+ years of experience. Reach HMA Auditing of Accounts by phone, WhatsApp or email.",
+    "Talk to HMA's Dubai business setup specialists. Free consultation by phone, WhatsApp or email. Burlington Tower, Business Bay. Reply within 1 business hour.",
+  alternates: { canonical: "/contact" },
   openGraph: {
-    title: "Contact | HMA Auditing of Accounts",
+    title: "Contact HMA Dubai | Free Business Setup Consultation",
     description:
-      "Get in touch with HMA Auditing of Accounts — licensed Ministry of Economy auditors and FTA-approved tax agents in Dubai, UAE.",
+      "Free consultation on business setup, Golden Visa, tax, accounting and audit in the UAE. Ministry of Economy licensed firm. Reply within 1 hour.",
+    url: "/contact",
   },
 };
 
@@ -57,14 +59,33 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <AnimatedSection>
             <p className="text-xs font-bold tracking-[0.3em] uppercase text-gold-400 mb-4">
-              H M A Auditing of Accounts
+              HMA Dubai
             </p>
             <h1 className="text-3xl sm:text-5xl font-bold text-white mb-4">
-              Reach Us
+              Free Consultation. Real Answers.
             </h1>
             <p className="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-              Professional Chartered Accountancy Service in Dubai UAE with 5+ Years of Experience!
+              Tell us what you&apos;re trying to do — set up a company, get a Golden Visa,
+              file tax — and we&apos;ll respond within 1 business hour.
             </p>
+            <div className="mt-7 flex flex-col sm:flex-row gap-3 justify-center">
+              <a
+                href="https://wa.me/971528370245"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#25D366] text-white font-bold text-sm rounded-lg hover:bg-[#1ebe5a] transition-all duration-200 uppercase tracking-wide"
+              >
+                <FiMessageCircle size={16} />
+                WhatsApp Us Now
+              </a>
+              <a
+                href="tel:+97145837001"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-gold-400 text-gold-400 font-bold text-sm rounded-lg hover:bg-gold-400 hover:text-navy-950 transition-all duration-200 uppercase tracking-wide"
+              >
+                <FiPhone size={16} />
+                Call +971 4 583 7001
+              </a>
+            </div>
           </AnimatedSection>
         </div>
       </section>
@@ -154,12 +175,61 @@ export default function ContactPage() {
                     <h2 className="text-xl font-bold text-navy-900">
                       Send Us Your Query Now
                     </h2>
+                    <p className="text-gray-500 text-sm mt-2">
+                      Mention your service of interest in the subject line — Business Setup, Golden Visa,
+                      Tax, Accounting or Audit — and we&apos;ll route your enquiry to the right specialist.
+                    </p>
                   </div>
                   <ContactForm />
                 </div>
               </AnimatedSection>
             </div>
 
+          </div>
+        </div>
+      </section>
+
+      {/* What happens next */}
+      <section className="py-16 bg-white border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection className="text-center mb-12">
+            <p className="text-xs font-bold tracking-[0.25em] text-gold-600 uppercase mb-3">
+              What Happens Next
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-navy-900">
+              From First Message to Trade Licence
+            </h2>
+          </AnimatedSection>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                step: "01",
+                title: "Reply Within 1 Hour",
+                desc: "A senior consultant — not a sales agent — replies to your enquiry within one business hour, asks the right questions and books a slot.",
+              },
+              {
+                step: "02",
+                title: "30-Minute Free Consultation",
+                desc: "We discuss your activity, ownership preferences, visa needs and budget. You leave with a clear recommendation — mainland, free zone or offshore.",
+              },
+              {
+                step: "03",
+                title: "Tailored Proposal & Timeline",
+                desc: "You receive a written proposal with a fixed quote, a documented timeline and a transparent breakdown of every cost — no hidden fees.",
+              },
+            ].map((s, i) => (
+              <AnimatedSection key={s.step} delay={i * 0.1}>
+                <div className="bg-[#F0F0F0] rounded-xl p-7 border border-gray-200 h-full hover:border-gold-300 transition-colors">
+                  <div className="w-12 h-12 rounded-full bg-navy-900 flex items-center justify-center mb-5">
+                    <span className="text-gold-400 font-black text-sm">{s.step}</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-navy-900 mb-2 uppercase tracking-wide">
+                    {s.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{s.desc}</p>
+                </div>
+              </AnimatedSection>
+            ))}
           </div>
         </div>
       </section>

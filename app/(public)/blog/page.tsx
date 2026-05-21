@@ -8,13 +8,15 @@ import AnimatedSection from "@/components/animations/AnimatedSection";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: "Knowledge Hub — Business Setup, Tax & Compliance Insights",
   description:
-    "Explore insights, articles, and expert perspectives from HMAA Dubai on business consulting, strategy, market trends, and more.",
+    "Expert guides on Dubai business setup, UAE Golden Visa, corporate tax, VAT, accounting and audit — written by HMA's chartered accountants.",
+  alternates: { canonical: "/blog" },
   openGraph: {
-    title: "Blog | HMAA Dubai",
+    title: "Knowledge Hub | HMA Dubai",
     description:
-      "Explore insights, articles, and expert perspectives from HMAA Dubai on business consulting, strategy, market trends, and more.",
+      "Practical guides for entrepreneurs setting up and growing a business in the UAE — formation, Golden Visa, tax, accounting and audit.",
+    url: "/blog",
   },
 };
 

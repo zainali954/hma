@@ -21,7 +21,7 @@ const BlogPostSchema = new Schema<IBlogPost>(
     excerpt: { type: String, default: "" },
     content: { type: String, default: "" },
     coverImage: { type: String, default: "" },
-    author: { type: String, default: "HMAA Dubai" },
+    author: { type: String, default: "HMA Dubai" },
     tags: [{ type: String, trim: true }],
     published: { type: Boolean, default: false },
     featured: { type: Boolean, default: false },

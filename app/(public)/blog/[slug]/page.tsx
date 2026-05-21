@@ -25,12 +25,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     return {
       title: post.title,
-      description: post.excerpt || `Read about ${post.title} on HMAA Dubai blog`,
+      description: post.excerpt || `Read about ${post.title} on HMA Dubai blog`,
       alternates: {
         canonical: `https://hmaadubai.com/blog/${post.slug}`,
       },
       openGraph: {
-        title: `${post.title} | HMAA Dubai`,
+        title: `${post.title} | HMA Dubai`,
         description: post.excerpt || "",
         type: "article",
         publishedTime: post.createdAt?.toISOString(),
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
     };
   } catch {
-    return { title: "HMAA Dubai Blog" };
+    return { title: "HMA Dubai Blog" };
   }
 }
 
@@ -225,7 +225,7 @@ export default async function BlogPostPage({ params }: Props) {
                 : {}),
               publisher: {
                 "@type": "Organization",
-                name: "HMAA Dubai",
+                name: "HMA Dubai",
               },
             }),
           }}

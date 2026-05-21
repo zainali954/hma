@@ -71,6 +71,18 @@ const nextConfig: NextConfig = {
   httpAgentOptions: {
     keepAlive: true,
   },
+
+  // 301 redirects for retired service slugs after the 2026 business-formation pivot
+  async redirects() {
+    return [
+      { source: "/services/company-formation", destination: "/services/business-setup", permanent: true },
+      { source: "/services/business-advisory", destination: "/services/business-setup", permanent: true },
+      { source: "/services/corporate-tax", destination: "/services/tax-vat-compliance", permanent: true },
+      { source: "/services/tax-consultancy", destination: "/services/tax-vat-compliance", permanent: true },
+      { source: "/services/accounting", destination: "/services/accounting-bookkeeping", permanent: true },
+      { source: "/services/bookkeeping", destination: "/services/accounting-bookkeeping", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

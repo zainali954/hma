@@ -45,26 +45,30 @@ async function seed() {
     const existingSettings = await SiteSettings.findOne();
     if (!existingSettings) {
       await SiteSettings.create({
-        siteName: "HMAA Dubai",
-        tagline: "Excellence in Consultancy",
-        description: "Premier consultancy agency in Dubai",
-        email: "info@hmaadubai.com",
-        phone: "+971 XX XXX XXXX",
-        address: "Dubai, United Arab Emirates",
+        siteName: "HMA Dubai",
+        tagline: "Business Setup & Compliance Partner in Dubai",
+        description:
+          "Ministry of Economy licensed firm offering business setup, Golden Visa, tax, accounting and audit services in Dubai, UAE.",
+        email: "dubai.office@hmaa.ae",
+        phone: "+971 4 583 7001",
+        address: "Office 1106, Burlington Tower, Business Bay, Dubai, UAE",
         socialLinks: { facebook: "", twitter: "", linkedin: "", instagram: "" },
         seo: {
-          defaultTitle: "HMAA Dubai | Premier Consultancy Agency",
-          titleTemplate: "%s | HMAA Dubai",
-          defaultDescription: "HMAA Dubai is a leading consultancy agency offering professional business consulting services in Dubai, UAE.",
-          keywords: "consultancy, dubai, business consulting, HMAA, UAE",
+          defaultTitle: "HMA Dubai | Business Setup & Company Formation Specialists",
+          titleTemplate: "%s | HMA Dubai",
+          defaultDescription:
+            "Business setup in Dubai made simple. Mainland, free zone and offshore company formation, Golden Visa, tax and audit — by a Ministry of Economy licensed firm.",
+          keywords:
+            "business setup dubai, company formation dubai, mainland company dubai, free zone setup uae, golden visa uae, vat registration dubai, corporate tax uae, audit firm dubai, HMA dubai",
         },
         heroSection: {
-          title: "Strategic Consulting Excellence",
-          subtitle: "Empowering businesses with professional consultancy services in Dubai and beyond",
-          ctaText: "Get Started",
+          title: "Start Your Business in Dubai — The Right Way",
+          subtitle:
+            "Mainland, Free Zone and Offshore company formation by a Ministry of Economy licensed firm. Trade licence in 3–5 working days.",
+          ctaText: "Free Setup Consultation",
           ctaLink: "/contact",
         },
-        aboutSection: { title: "About HMAA Dubai", content: "", mission: "", vision: "" },
+        aboutSection: { title: "About HMA Dubai", content: "", mission: "", vision: "" },
         stats: [
           { label: "Projects Completed", value: "500+", icon: "FiBriefcase" },
           { label: "Happy Clients", value: "200+", icon: "FiUsers" },

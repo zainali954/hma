@@ -7,13 +7,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX, FiChevronDown } from "react-icons/fi";
 
 const services = [
-  { label: "Audit & Assurance",  href: "/services/audit-assurance"   },
-  { label: "Accounting",         href: "/services/accounting"         },
-  { label: "Bookkeeping",        href: "/services/bookkeeping"        },
-  { label: "Tax Consultancy",    href: "/services/tax-consultancy"    },
-  { label: "Corporate Tax",      href: "/services/corporate-tax"      },
-  { label: "Business Advisory",  href: "/services/business-advisory"  },
-  { label: "Company Formation",  href: "/services/company-formation"  },
+  { label: "Business Setup in Dubai",   href: "/services/business-setup"          },
+  { label: "Golden Visa & Residency",   href: "/services/golden-visa"             },
+  { label: "Tax & VAT Compliance",      href: "/services/tax-vat-compliance"      },
+  { label: "Accounting & Bookkeeping",  href: "/services/accounting-bookkeeping"  },
+  { label: "Audit & Assurance",         href: "/services/audit-assurance"         },
 ];
 
 export default function Header() {

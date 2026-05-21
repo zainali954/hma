@@ -10,25 +10,25 @@ import { BlogPost } from "@/lib/models/BlogPost";
 import {
   FiArrowRight,
   FiTrendingUp,
-  FiShield,
   FiBarChart2,
   FiGlobe,
-  FiUsers,
   FiBookOpen,
   FiSearch,
   FiHome,
-  FiHeart,
-  FiZap,
   FiCoffee,
-  FiActivity,
   FiPackage,
-  FiRadio,
-  FiDroplet,
   FiGrid,
   FiCheckCircle,
   FiFileText,
   FiTool,
   FiCalendar,
+  FiAward,
+  FiBriefcase,
+  FiCpu,
+  FiShoppingBag,
+  FiTruck,
+  FiMonitor,
+  FiHeart,
 } from "react-icons/fi";
 
 /* ─── data ─── */
@@ -52,34 +52,34 @@ const credentialsData = [
 ];
 
 const industriesData = [
-  { icon: FiTrendingUp, label: "Private Equity" },
-  { icon: FiBarChart2, label: "Financial Services" },
-  { icon: FiHeart, label: "Healthcare" },
-  { icon: FiZap, label: "Power & Utilities" },
-  { icon: FiCoffee, label: "Restaurants" },
-  { icon: FiHome, label: "Construction & Real Estate" },
-  { icon: FiPackage, label: "Production & Distribution" },
-  { icon: FiRadio, label: "Advertising & Market Research" },
-  { icon: FiBookOpen, label: "Education" },
-  { icon: FiDroplet, label: "Oil & Gas" },
-  { icon: FiActivity, label: "Asset Management" },
-  { icon: FiGrid, label: "& many more..." },
+  { icon: FiShoppingBag, label: "E-commerce & Retail" },
+  { icon: FiBriefcase,   label: "Consulting & Services" },
+  { icon: FiCpu,         label: "Tech & SaaS Startups" },
+  { icon: FiTrendingUp,  label: "Trading & Holding" },
+  { icon: FiCoffee,      label: "Food & Beverage" },
+  { icon: FiHome,        label: "Real Estate" },
+  { icon: FiHeart,       label: "Healthcare & Clinics" },
+  { icon: FiBookOpen,    label: "Education & Training" },
+  { icon: FiTruck,       label: "Logistics & Freight" },
+  { icon: FiPackage,     label: "Manufacturing" },
+  { icon: FiMonitor,     label: "Media & Marketing" },
+  { icon: FiGrid,        label: "& many more..." },
 ];
 
 const statsData = [
-  { label: "Clients", value: 150, suffix: "+" },
-  { label: "Accountings", value: 30, suffix: "+" },
-  { label: "Business Advisory", value: 50, suffix: "+" },
-  { label: "Advisory", value: 100, suffix: "+" },
+  { label: "Businesses Launched", value: 150, suffix: "+" },
+  { label: "Free Zones Covered",  value: 40,  suffix: "+" },
+  { label: "Years in the UAE",    value: 8,   suffix: "+" },
+  { label: "Client Retention",    value: 98,  suffix: "%" },
 ];
 
 const servicesData = [
-  { icon: FiSearch,    label: "Audit & Assurance",  href: "/services/audit-assurance"   },
-  { icon: FiBarChart2, label: "Accounting",          href: "/services/accounting"         },
-  { icon: FiBookOpen,  label: "Bookkeeping",         href: "/services/bookkeeping"        },
-  { icon: FiGlobe,     label: "Tax Consultancy",     href: "/services/tax-consultancy"    },
-  { icon: FiShield,    label: "Corporate Tax",       href: "/services/corporate-tax"      },
-  { icon: FiTrendingUp,label: "Business Advisory",   href: "/services/business-advisory"  },
+  { icon: FiHome,       label: "Business Setup",          href: "/services/business-setup"          },
+  { icon: FiAward,      label: "Golden Visa",             href: "/services/golden-visa"             },
+  { icon: FiFileText,   label: "Tax & VAT Compliance",    href: "/services/tax-vat-compliance"      },
+  { icon: FiBarChart2,  label: "Accounting & Bookkeeping",href: "/services/accounting-bookkeeping"  },
+  { icon: FiSearch,     label: "Audit & Assurance",       href: "/services/audit-assurance"         },
+  { icon: FiGlobe,      label: "Explore All Services",    href: "/services"                         },
 ];
 
 const clientsData = [
@@ -175,23 +175,19 @@ export default async function HomePage() {
             <AnimatedSection direction="right" className="lg:w-2/3">
               <h2 className="text-2xl font-bold text-navy-900 mb-5 lg:hidden uppercase">About Us</h2>
               <p className="text-gray-700 leading-relaxed mb-5">
-                Back in 2017 HMA AUDITING OF ACCOUNTS had been formed with a mission of
-                supporting businesses in UAE by providing a complete range of esteemed quality
-                Chartered Accountancy services like Auditing, Accounting, Taxation and Business
-                Advisory.
+                Since 2017, HMA has helped entrepreneurs and SMEs launch and grow in the UAE.
+                We don&apos;t just file the paperwork — we are a Ministry of Economy licensed firm of
+                chartered accountants who advise you on the right jurisdiction, the cleanest tax position,
+                and the audit-ready way to run your business from day one.
               </p>
               <p className="text-gray-700 leading-relaxed mb-6">
-                HMA is an association of dedicated professionals qualified from world-class
-                professional Accountancy bodies like ICAEW, AICPA, PICPA, IPA (Australia), ACCA
-                and CIA. Our experienced professional team is highly energetic and enthusiastic
-                with great vision and enriched market exposure in wide range of industries in the
-                region.
+                Our team is qualified through world-class accountancy bodies — <strong className="text-navy-900">ICAEW, ACCA, AICPA, PICPA, IPA (Australia)</strong> and <strong className="text-navy-900">CIA</strong>.
+                That dual expertise — business setup + chartered accounting under one roof — is what separates
+                us from the typical Dubai PRO agency.
               </p>
               <p className="text-gray-500 text-sm leading-relaxed italic mb-6 border-l-2 border-gray-200 pl-4">
-                We are a team of experts and professionals in the field of Chartered Accountancy
-                who are sharing a common vision of helping businesses to succeed and we are
-                dedicated to{" "}
-                <span className="text-gold-600 not-italic font-semibold">&ldquo;DOING MORE&rdquo;</span>.
+                One firm. Mainland, free zone, offshore, Golden Visa, tax, accounting, audit.{" "}
+                <span className="text-gold-600 not-italic font-semibold">&ldquo;DOING MORE&rdquo;</span> isn&apos;t a slogan — it&apos;s how we&apos;ve worked for 8 years.
               </p>
               <Link
                 href="/about"
@@ -209,10 +205,10 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-black text-navy-900 mb-2 uppercase">
-              Industries We Serve
+              Industries We Set Up
             </h2>
             <p className="text-xs font-bold tracking-[0.25em] text-gold-600 uppercase">
-              H M A Auditing of Accounts
+              From Trade Licence to Tax Filing
             </p>
           </AnimatedSection>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">

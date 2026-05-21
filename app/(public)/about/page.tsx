@@ -7,13 +7,15 @@ import {
 } from "react-icons/fi";
 
 export const metadata: Metadata = {
-  title: "About Us",
+  title: "About HMA Dubai | Business Setup & Compliance Specialists",
   description:
-    "HMA Auditing of Accounts — formed in 2017 with a mission to support UAE businesses through Auditing, Accounting, Taxation and Business Advisory services. Licensed by the Ministry of Economy and approved by ICAEW & ACCA.",
+    "HMA is Dubai's trusted business setup and compliance partner since 2017. Ministry of Economy licensed, FTA-registered tax agency, ICAEW Authorised Training Employer.",
+  alternates: { canonical: "/about" },
   openGraph: {
-    title: "About HMA Auditing of Accounts | Dubai UAE",
+    title: "About HMA Dubai | Business Setup & Compliance Specialists",
     description:
-      "Learn about HMA — a licensed audit firm, FTA-registered tax agent and ICAEW Authorised Training Employer based in Business Bay, Dubai.",
+      "Helping entrepreneurs and SMEs launch, grow and stay compliant in the UAE since 2017. Licensed by the Ministry of Economy, FTA-registered, ICAEW & ACCA qualified.",
+    url: "/about",
   },
 };
 
@@ -69,14 +71,14 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <AnimatedSection>
             <p className="text-xs font-bold tracking-[0.3em] uppercase text-gold-600 mb-4">
-              H M A Auditing of Accounts
+              HMA Dubai
             </p>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-              Your Trusted Compliance<br />Partner in the UAE
+              Dubai&rsquo;s Trusted Business Setup<br />&amp; Compliance Partner
             </h1>
             <p className="text-gray-400 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
-              A licensed audit firm, FTA-registered tax agent and ICAEW Authorised Training Employer —
-              serving UAE businesses since 2017 with integrity, confidentiality and timeliness.
+              Helping entrepreneurs and SMEs launch, grow and stay compliant in the UAE since 2017 —
+              by a Ministry of Economy licensed firm of chartered accountants.
             </p>
           </AnimatedSection>
         </div>
@@ -122,26 +124,28 @@ export default function AboutPage() {
               <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-6">Our Story</h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  Back in 2017, <strong className="text-navy-900">HMA Auditing of Accounts</strong> had been formed
-                  with a mission of supporting businesses in UAE by providing a complete range of esteemed quality
-                  Chartered Accountancy services like Auditing, Accounting, Taxation and Business Advisory.
+                  Founded in 2017 as <strong className="text-navy-900">HMA Auditing of Accounts</strong>,
+                  we started with a single belief: setting up a business in the UAE shouldn&apos;t be
+                  confusing, costly, or compromised. Most setup agencies hand you a trade licence and
+                  disappear. We do the opposite — we walk you through jurisdiction selection, formation,
+                  tax registration, accounting, and audit, all under one roof.
                 </p>
                 <p>
-                  HMA is an association of dedicated professionals qualified from world-class professional
-                  Accountancy bodies like <strong className="text-navy-900">ICAEW, AICPA, PICPA, IPA (Australia), ACCA</strong> and{" "}
-                  <strong className="text-navy-900">CIA</strong>. Our experienced professional team is highly energetic
-                  and enthusiastic with great vision and enriched market exposure in wide range of industries in the region.
+                  That&apos;s possible because HMA is more than a PRO agency. Our team is qualified through
+                  world-class accountancy bodies — <strong className="text-navy-900">ICAEW, AICPA, PICPA, IPA (Australia), ACCA</strong> and{" "}
+                  <strong className="text-navy-900">CIA</strong>. We are an{" "}
+                  <strong className="text-navy-900">Authorised Training Employer</strong> approved by the
+                  Institute of Chartered Accountants in England and Wales, an{" "}
+                  <strong className="text-navy-900">Approved Employer – Platinum</strong> with ACCA UK,
+                  and a licensed audit firm registered with the Ministry of Economy, UAE.
                 </p>
                 <p>
-                  HMA is an <strong className="text-navy-900">Authorised Training Employer (ATE)</strong> approved by
-                  the Institute of Chartered Accountants in England and Wales, and an{" "}
-                  <strong className="text-navy-900">Approved Employer – Platinum</strong> with the Association of
-                  Certified Chartered Accountants (ACCA – UK). HMA is a licensed audit firm registered with the
-                  Ministry of Economy, UAE.
+                  Eight years and 150+ businesses later, we&apos;ve become the firm Dubai entrepreneurs
+                  recommend when a friend asks &ldquo;who should I use to set up?&rdquo; — and we&apos;re also
+                  the firm that audits and files tax returns for many of those same companies years later.
                 </p>
                 <p className="text-gray-500 text-sm italic border-l-2 border-gray-300 pl-4">
-                  We are a team of experts and professionals in the field of Chartered Accountancy who are sharing
-                  a common vision of helping businesses to succeed and we are dedicated to{" "}
+                  One firm. Mainland, free zone, offshore, Golden Visa, tax, accounting, audit. We&apos;re dedicated to{" "}
                   <span className="text-gold-600 not-italic font-semibold">&ldquo;DOING MORE&rdquo;</span>.
                 </p>
               </div>
@@ -155,10 +159,10 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0 md:divide-x md:divide-navy-700">
             {[
-              { label: "Happy Clients",      value: 150, suffix: "+" },
-              { label: "Accountings",         value: 30,  suffix: "+" },
-              { label: "Business Advisory",   value: 50,  suffix: "+" },
-              { label: "Advisory",            value: 100, suffix: "+" },
+              { label: "Businesses Launched", value: 150, suffix: "+" },
+              { label: "Free Zones Covered",  value: 40,  suffix: "+" },
+              { label: "Years in the UAE",    value: 8,   suffix: "+" },
+              { label: "Client Retention",    value: 98,  suffix: "%" },
             ].map((stat, i) => (
               <AnimatedSection key={stat.label} delay={i * 0.1}>
                 <div className="text-center md:px-6">
@@ -188,9 +192,9 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-bold text-navy-900 mb-4">Our Mission</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Our primary purpose as an organisation is to deliver high quality products both in
-                  appearance and content — supporting businesses in UAE with a complete range of esteemed
-                  Chartered Accountancy services including Auditing, Accounting, Taxation and Business Advisory.
+                  To make business formation in the UAE simple, transparent and audit-ready from day
+                  one — combining chartered accounting rigour with hands-on setup expertise so
+                  entrepreneurs can focus on building the business, not the bureaucracy.
                 </p>
               </div>
             </AnimatedSection>
@@ -202,9 +206,9 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-bold text-navy-900 mb-4">Our Vision</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Our organisation stands at 10+ dedicated employees. We plan to expand to other GCC nations
-                  with 50+ employees — becoming the most trusted Chartered Accountancy and business advisory
-                  firm in the region, recognised for integrity and excellence.
+                  To be the GCC&apos;s most trusted name in business setup and compliance — known
+                  not just for delivering trade licences, but for staying with our clients through
+                  every stage of their growth, from incorporation to Golden Visa to exit.
                 </p>
               </div>
             </AnimatedSection>

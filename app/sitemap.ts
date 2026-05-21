@@ -1,16 +1,26 @@
 import type { MetadataRoute } from "next";
+import { servicesData } from "@/lib/services-data";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://hmaadubai.com";
+  const now = new Date();
 
-  // Static routes
-  const staticRoutes = [
-    { url: baseUrl, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 1.0 },
-    { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.8 },
-    { url: `${baseUrl}/services`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.8 },
-    { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.7 },
-    { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.9 },
+  // Static top-level routes
+  const staticRoutes: MetadataRoute.Sitemap = [
+    { url: baseUrl,                lastModified: now, changeFrequency: "weekly",  priority: 1.0 },
+    { url: `${baseUrl}/services`,  lastModified: now, changeFrequency: "weekly",  priority: 0.9 },
+    { url: `${baseUrl}/about`,     lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${baseUrl}/contact`,   lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${baseUrl}/blog`,      lastModified: now, changeFrequency: "weekly",  priority: 0.6 },
   ];
+
+  // Service detail pages — business-setup gets a small priority boost as our primary offer
+  const serviceRoutes: MetadataRoute.Sitemap = servicesData.map((s) => ({
+    url: `${baseUrl}/services/${s.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: s.slug === "business-setup" ? 0.95 : 0.85,
+  }));
 
   // Dynamic blog posts
   let blogRoutes: MetadataRoute.Sitemap = [];
@@ -22,15 +32,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .select("slug updatedAt")
       .lean();
 
-    blogRoutes = posts.map((post) => ({
+    blogRoutes = posts.map((post: { slug: string; updatedAt?: Date }) => ({
       url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: post.updatedAt || new Date(),
+      lastModified: post.updatedAt || now,
       changeFrequency: "weekly" as const,
-      priority: 0.7,
+      priority: 0.5,
     }));
   } catch {
-    // If DB is not available, skip blog routes
+    // If DB is not available at build time, ship the sitemap without blog routes.
   }
 
-  return [...staticRoutes, ...blogRoutes];
+  return [...staticRoutes, ...serviceRoutes, ...blogRoutes];
 }

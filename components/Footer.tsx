@@ -1,12 +1,39 @@
 import Link from "next/link";
-import { FiMapPin, FiPhone, FiMail, FiFacebook, FiTwitter, FiInstagram, FiLinkedin } from "react-icons/fi";
+import { FiMapPin, FiPhone, FiMail, FiFacebook, FiTwitter, FiInstagram, FiLinkedin, FiMessageCircle } from "react-icons/fi";
+
+const footerServices = [
+  { label: "Business Setup in Dubai",   href: "/services/business-setup"          },
+  { label: "Golden Visa & Residency",   href: "/services/golden-visa"             },
+  { label: "Tax & VAT Compliance",      href: "/services/tax-vat-compliance"      },
+  { label: "Accounting & Bookkeeping",  href: "/services/accounting-bookkeeping"  },
+  { label: "Audit & Assurance",         href: "/services/audit-assurance"         },
+];
 
 export default function Footer() {
   return (
     <footer className="bg-navy-950 text-white">
       {/* Main footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Services */}
+          <div>
+            <h3 className="text-base font-bold text-white mb-5 uppercase tracking-wider">
+              Our Services
+            </h3>
+            <ul className="space-y-2.5">
+              {footerServices.map((s) => (
+                <li key={s.href}>
+                  <Link
+                    href={s.href}
+                    className="text-gray-300 hover:text-gold-400 transition-colors text-sm"
+                  >
+                    {s.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Location */}
           <div>
             <h3 className="text-base font-bold text-white mb-5 uppercase tracking-wider">
@@ -49,6 +76,17 @@ export default function Footer() {
                 >
                   <FiPhone size={15} className="text-gold-400 flex-shrink-0" />
                   (+971) 4 583 7001
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wa.me/971528370245"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-gray-300 hover:text-gold-400 transition-colors text-sm"
+                >
+                  <FiMessageCircle size={15} className="text-gold-400 flex-shrink-0" />
+                  WhatsApp Us
                 </a>
               </li>
               <li>

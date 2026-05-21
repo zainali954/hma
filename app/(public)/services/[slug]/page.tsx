@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import AnimatedSection from "@/components/animations/AnimatedSection";
 import { servicesData, getServiceBySlug } from "@/lib/services-data";
-import { FiCheckCircle, FiArrowRight, FiArrowLeft } from "react-icons/fi";
+import { FiCheckCircle, FiArrowRight, FiArrowLeft, FiHelpCircle } from "react-icons/fi";
 import ContactForm from "@/components/ContactForm";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -16,12 +16,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const service = getServiceBySlug(slug);
   if (!service) return {};
+
+  const title = service.metaTitle ?? service.title;
+  const description = service.metaDescription ?? service.shortDesc;
+
   return {
-    title: service.title,
-    description: service.shortDesc,
+    title,
+    description,
+    alternates: {
+      canonical: `/services/${service.slug}`,
+    },
     openGraph: {
-      title: `${service.title} | HMA Auditing of Accounts`,
-      description: service.shortDesc,
+      title,
+      description,
+      url: `/services/${service.slug}`,
+      type: "website",
     },
   };
 }
@@ -35,8 +44,50 @@ export default async function ServiceDetailPage({ params }: Props) {
   const prev = servicesData[currentIndex - 1];
   const next = servicesData[currentIndex + 1];
 
+  const faqSchema = service.faqs && service.faqs.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: service.faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: f.a,
+          },
+        })),
+      }
+    : null;
+
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.metaDescription ?? service.shortDesc,
+    provider: {
+      "@type": "ProfessionalService",
+      name: "HMA Dubai",
+      url: "https://hmaadubai.com",
+    },
+    areaServed: {
+      "@type": "Place",
+      name: "Dubai, United Arab Emirates",
+    },
+  };
+
   return (
     <>
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+
       {/* Hero */}
       <section className="pt-24 sm:pt-32 pb-14 sm:pb-20 bg-navy-950 relative overflow-hidden">
         <div
@@ -52,7 +103,7 @@ export default async function ServiceDetailPage({ params }: Props) {
               <FiArrowLeft size={13} /> All Services
             </Link>
             <p className="text-xs font-bold tracking-[0.3em] uppercase text-gold-600 mb-4">
-              H M A Auditing of Accounts
+              HMA Dubai
             </p>
             <h1 className="text-3xl sm:text-5xl font-bold text-white mb-4 max-w-3xl">
               {service.title}
@@ -135,7 +186,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                   ))}
                 </ul>
 
-                <div className="mt-8 pt-6 border-t border-gray-200">
+                <div className="mt-8 pt-6 border-t border-gray-200 space-y-3">
                   <Link
                     href="/contact"
                     className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-navy-900 text-white font-bold text-sm rounded-lg hover:bg-navy-800 transition-all duration-200 uppercase tracking-wide"
@@ -143,6 +194,14 @@ export default async function ServiceDetailPage({ params }: Props) {
                     Get a Free Quote
                     <FiArrowRight size={14} />
                   </Link>
+                  <a
+                    href="https://wa.me/971528370245"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 border-2 border-navy-900 text-navy-900 font-bold text-sm rounded-lg hover:bg-navy-900 hover:text-white transition-all duration-200 uppercase tracking-wide"
+                  >
+                    WhatsApp Us
+                  </a>
                 </div>
               </div>
             </AnimatedSection>
@@ -150,6 +209,45 @@ export default async function ServiceDetailPage({ params }: Props) {
           </div>
         </div>
       </section>
+
+      {/* FAQs */}
+      {service.faqs && service.faqs.length > 0 && (
+        <section className="py-20 bg-[#F0F0F0] border-t border-gray-200">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AnimatedSection className="text-center mb-12">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-navy-900 mb-4">
+                <FiHelpCircle className="text-gold-400" size={22} />
+              </div>
+              <p className="text-xs font-bold tracking-[0.25em] uppercase text-gold-600 mb-3">
+                Frequently Asked
+              </p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-navy-900">
+                Questions About {service.title}
+              </h2>
+            </AnimatedSection>
+
+            <div className="space-y-4">
+              {service.faqs.map((faq, i) => (
+                <AnimatedSection key={faq.q} delay={i * 0.05}>
+                  <details className="group bg-white rounded-xl border border-gray-200 hover:border-gold-300 transition-colors">
+                    <summary className="cursor-pointer px-6 py-5 flex items-center justify-between gap-4 list-none">
+                      <h3 className="text-base sm:text-lg font-bold text-navy-900 leading-snug">
+                        {faq.q}
+                      </h3>
+                      <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gold-50 border border-gold-200 flex items-center justify-center text-gold-600 font-black transition-transform group-open:rotate-45">
+                        +
+                      </span>
+                    </summary>
+                    <div className="px-6 pb-6 -mt-1 text-gray-600 text-sm leading-relaxed">
+                      {faq.a}
+                    </div>
+                  </details>
+                </AnimatedSection>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Prev / Next navigation */}
       {(prev || next) && (
@@ -193,14 +291,18 @@ export default async function ServiceDetailPage({ params }: Props) {
             <AnimatedSection direction="left">
               <p className="text-xs font-bold tracking-[0.3em] uppercase text-gold-600 mb-4">Free Consultation</p>
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-5">
-                Send Us Your Query Now
+                Talk to a Specialist Today
               </h2>
               <p className="text-gray-400 text-base leading-relaxed mb-8">
-                Speak with one of our qualified experts about{" "}
-                <span className="text-white font-medium">{service.title}</span> — no obligation, no pressure.
+                Get straight answers on <span className="text-white font-medium">{service.title}</span> from a qualified expert — no obligation, no pressure, no upsell.
               </p>
               <ul className="space-y-3">
-                {["ICAEW, ACCA & AICPA Qualified Experts", "Licensed Ministry of Economy Auditors", "Approved Federal Tax Authority Agency", "Confidential & Timely Service"].map((point) => (
+                {[
+                  "Ministry of Economy Licensed Firm",
+                  "Federal Tax Authority Registered Agent",
+                  "ICAEW, ACCA & AICPA Qualified Experts",
+                  "Reply Within 1 Business Hour",
+                ].map((point) => (
                   <li key={point} className="flex items-center gap-3 text-sm text-gray-300">
                     <span className="w-1.5 h-1.5 rounded-full bg-gold-400 flex-shrink-0" />
                     {point}

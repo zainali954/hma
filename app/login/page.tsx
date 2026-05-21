@@ -69,7 +69,7 @@ export default function LoginPage() {
             </div>
             <h1 className="text-2xl font-bold text-navy-900">Admin Login</h1>
             <p className="text-gray-500 text-sm mt-1">
-              HMAA Dubai Administration
+              HMA Dubai Administration
             </p>
           </div>
 
