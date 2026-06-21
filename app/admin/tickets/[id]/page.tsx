@@ -106,6 +106,52 @@ const categories = [
   { value: "other", label: "Other" },
 ];
 
+function relativeTime(iso: string): string {
+  const delta = Date.now() - new Date(iso).getTime();
+  if (delta < 60_000) return "just now";
+  if (delta < 3_600_000) return `${Math.floor(delta / 60_000)}m ago`;
+  if (delta < 86_400_000) return `${Math.floor(delta / 3_600_000)}h ago`;
+  if (delta < 604_800_000) return `${Math.floor(delta / 86_400_000)}d ago`;
+  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
+function ChatBubble({ isAdmin, name, content, createdAt }: {
+  isAdmin: boolean;
+  name: string;
+  content: string;
+  createdAt: string;
+}) {
+  return (
+    <div className={`flex items-end gap-2 ${isAdmin ? "justify-end" : "justify-start"}`}>
+      {!isAdmin && (
+        <div className="w-7 h-7 rounded-full bg-navy-100 flex items-center justify-center flex-shrink-0 mb-1">
+          <FiUser size={13} className="text-navy-600" />
+        </div>
+      )}
+      <div className={`max-w-[75%]`}>
+        <div className={`flex items-center gap-2 mb-1 ${isAdmin ? "justify-end" : ""}`}>
+          <span className="text-[11px] font-semibold text-gray-500">{isAdmin ? `${name} (admin)` : name}</span>
+          <span className="text-[10px] text-gray-400" title={new Date(createdAt).toLocaleString()}>
+            {relativeTime(createdAt)}
+          </span>
+        </div>
+        <div className={`px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap rounded-2xl ${
+          isAdmin
+            ? "bg-navy-900 text-white rounded-br-sm"
+            : "bg-gray-100 text-navy-900 rounded-bl-sm"
+        }`}>
+          {content}
+        </div>
+      </div>
+      {isAdmin && (
+        <div className="w-7 h-7 rounded-full bg-navy-900 flex items-center justify-center flex-shrink-0 mb-1">
+          <span className="text-[9px] font-black text-gold-400 tracking-tight">HMA</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function TicketDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const [ticket, setTicket] = useState<Ticket | null>(null);
@@ -494,101 +540,79 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
 
             {activeTab === "conversation" && (
               <>
-                <div className="space-y-4">
-                  {/* Initial description */}
-                  <div className="bg-gray-50 rounded-xl p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-7 h-7 rounded-full bg-navy-100 flex items-center justify-center">
-                        <FiUser size={14} className="text-navy-600" />
-                      </div>
-                      <span className="text-sm font-medium text-navy-900">{ticket.customerName}</span>
-                      <span className="text-xs text-gray-400">· {new Date(ticket.createdAt).toLocaleString()}</span>
-                    </div>
-                    <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap ml-9">
-                      {ticket.description}
-                    </p>
+                {/* Chat window */}
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="px-4 py-3 border-b border-gray-100 bg-gray-50 flex items-center gap-2">
+                    <FiMessageSquare size={13} className="text-gray-400" />
+                    <span className="text-xs font-medium text-gray-500">Conversation thread</span>
                   </div>
 
-                  {/* Messages */}
-                  {ticket.messages.map((msg, i) => (
-                    <div
-                      key={i}
-                      className={`rounded-xl p-4 ${
-                        msg.sender === "admin"
-                          ? "bg-navy-50 border border-navy-100"
-                          : "bg-gray-50"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className={`w-7 h-7 rounded-full flex items-center justify-center ${
-                          msg.sender === "admin" ? "bg-gold-100" : "bg-navy-100"
-                        }`}>
-                          {msg.sender === "admin" ? (
-                            <span className="text-xs font-bold text-gold-700">A</span>
-                          ) : (
-                            <FiUser size={14} className="text-navy-600" />
-                          )}
-                        </div>
-                        <span className="text-sm font-medium text-navy-900">{msg.senderName}</span>
-                        <span className="text-xs text-gray-400">· {new Date(msg.createdAt).toLocaleString()}</span>
-                      </div>
-                      <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap ml-9">
-                        {msg.content}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Reply composer */}
-                {ticket.status !== "closed" && (
-                  <div className="bg-white rounded-xl border border-gray-200 p-4">
-                    <div className="flex items-center gap-2 mb-3">
-                      <FiSend size={14} className="text-gray-400" />
-                      <span className="text-xs font-medium text-gray-500">
-                        Reply to customer — this will be sent as an email
-                      </span>
-                    </div>
-                    <textarea
-                      value={replyContent}
-                      onChange={(e) => setReplyContent(e.target.value)}
-                      placeholder="Type your reply to the customer..."
-                      rows={4}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 outline-none text-sm resize-none"
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                          handleSendReply();
-                        }
-                      }}
+                  <div className="px-4 py-4 space-y-4 min-h-[200px]">
+                    {/* Initial contact message — customer */}
+                    <ChatBubble
+                      isAdmin={false}
+                      name={ticket.customerName}
+                      content={ticket.description}
+                      createdAt={ticket.createdAt}
                     />
-                    <div className="flex items-center justify-between mt-3">
-                      <p className="text-xs text-gray-400">⌘/Ctrl + Enter to send</p>
-                      <button
-                        onClick={handleSendReply}
-                        disabled={!replyContent.trim() || sendingReply}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-navy-900 text-white text-sm font-medium rounded-lg hover:bg-navy-800 disabled:opacity-50 transition-colors"
-                      >
-                        {sendingReply ? (
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        ) : (
-                          <FiSend size={14} />
-                        )}
-                        Send Reply
-                      </button>
-                    </div>
-                  </div>
-                )}
 
-                {ticket.status === "closed" && (
-                  <div className="bg-gray-50 rounded-xl p-4 text-center">
-                    <p className="text-sm text-gray-500">This ticket is closed. Reopen it to reply.</p>
-                    <button
-                      onClick={() => patchTicket({ status: "open" })}
-                      className="mt-2 text-sm text-gold-600 hover:text-gold-700 font-medium"
-                    >
-                      Reopen ticket
-                    </button>
+                    {ticket.messages.map((msg, i) => (
+                      <ChatBubble
+                        key={i}
+                        isAdmin={msg.sender === "admin"}
+                        name={msg.senderName}
+                        content={msg.content}
+                        createdAt={msg.createdAt}
+                      />
+                    ))}
                   </div>
-                )}
+
+                  {/* Reply composer */}
+                  <div className="border-t border-gray-100">
+                    {ticket.status === "closed" ? (
+                      <div className="px-4 py-4 flex items-center justify-between">
+                        <p className="text-sm text-gray-400">Ticket is closed.</p>
+                        <button
+                          onClick={() => patchTicket({ status: "open" })}
+                          className="text-sm text-gold-600 hover:text-gold-700 font-medium"
+                        >
+                          Reopen to reply →
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="px-4 py-4">
+                        <textarea
+                          value={replyContent}
+                          onChange={(e) => setReplyContent(e.target.value)}
+                          placeholder="Type your reply to the customer..."
+                          rows={3}
+                          className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 outline-none text-sm resize-none transition-all"
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSendReply();
+                          }}
+                        />
+                        <div className="flex items-center justify-between mt-2">
+                          <p className="text-xs text-gray-400 flex items-center gap-1">
+                            <FiSend size={11} />
+                            Sent as email · ⌘/Ctrl+Enter to send
+                          </p>
+                          <button
+                            onClick={handleSendReply}
+                            disabled={!replyContent.trim() || sendingReply}
+                            className="inline-flex items-center gap-2 px-5 py-2.5 bg-navy-900 text-white text-sm font-semibold rounded-xl hover:bg-navy-800 disabled:opacity-40 transition-colors"
+                          >
+                            {sendingReply ? (
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                              <FiSend size={13} />
+                            )}
+                            Send Reply
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </>
             )}
 
