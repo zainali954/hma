@@ -7,6 +7,9 @@ import SeoSettings from "@/components/admin/blog/SeoSettings";
 import SocialSharing from "@/components/admin/blog/SocialSharing";
 import FaqBuilder from "@/components/admin/blog/FaqBuilder";
 import KeyTakeaways from "@/components/admin/blog/KeyTakeaways";
+import AiSnippet from "@/components/admin/blog/AiSnippet";
+import SchemaTypeSelector from "@/components/admin/blog/SchemaTypeSelector";
+import type { SchemaType } from "@/lib/models/BlogPost";
 import {
   FiSave,
   FiArrowLeft,
@@ -66,6 +69,13 @@ export default function EditBlogPostPage({
   // AEO
   const [faqs, setFaqs] = useState<Array<{ question: string; answer: string }>>([]);
   const [keyTakeaways, setKeyTakeaways] = useState<string[]>([]);
+  const [aiSnippet, setAiSnippet] = useState("");
+
+  // Schema
+  const [schemaType, setSchemaType] = useState<SchemaType>("Article");
+  const [howToTotalTime, setHowToTotalTime] = useState("");
+  const [howToEstimatedCost, setHowToEstimatedCost] = useState("");
+  const [howToSupply, setHowToSupply] = useState<string[]>([]);
 
   useEffect(() => {
     fetch(`/api/blog/${id}`)
@@ -100,6 +110,12 @@ export default function EditBlogPostPage({
         // AEO
         setFaqs(post.faqs || []);
         setKeyTakeaways(post.keyTakeaways || []);
+        setAiSnippet(post.aiSnippet || "");
+        // Schema
+        setSchemaType(post.schemaType || "Article");
+        setHowToTotalTime(post.howToTotalTime || "");
+        setHowToEstimatedCost(post.howToEstimatedCost || "");
+        setHowToSupply(post.howToSupply || []);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -158,6 +174,11 @@ export default function EditBlogPostPage({
           ogImage,
           faqs,
           keyTakeaways,
+          aiSnippet,
+          schemaType,
+          howToTotalTime,
+          howToEstimatedCost,
+          howToSupply,
           noIndex,
           noFollow,
         }),
@@ -193,6 +214,13 @@ export default function EditBlogPostPage({
       ogImage: setOgImage,
     };
     setters[field]?.(value);
+  };
+
+  const handleSchemaChange = (field: string, value: string | string[]) => {
+    if (field === "schemaType") setSchemaType(value as SchemaType);
+    else if (field === "howToTotalTime") setHowToTotalTime(value as string);
+    else if (field === "howToEstimatedCost") setHowToEstimatedCost(value as string);
+    else if (field === "howToSupply") setHowToSupply(value as string[]);
   };
 
   const seoData = { seoTitle, metaDescription, focusKeyword, canonicalUrl };
@@ -352,6 +380,27 @@ export default function EditBlogPostPage({
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
+              </div>
+            </div>
+
+            {/* AI Snippet */}
+            <div>
+              <label className="block text-sm font-medium text-navy-900 mb-1.5">
+                AI Snippet / TL;DR
+                <span className="text-gray-400 font-normal ml-1">(optional)</span>
+              </label>
+              <textarea
+                value={aiSnippet}
+                onChange={(e) => setAiSnippet(e.target.value.slice(0, 260))}
+                rows={2}
+                className="w-full px-4 py-2.5 text-sm rounded-xl border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 outline-none transition-all resize-none"
+                placeholder="One punchy sentence (100–250 chars) — LLMs pull this as your site's primary answer to the query..."
+              />
+              <div className="flex justify-between mt-1">
+                <span className="text-xs text-gray-400">Displayed below the H1; AI crawlers index this first</span>
+                <span className={`text-xs font-medium tabular-nums ${aiSnippet.length > 250 ? "text-red-500" : aiSnippet.length >= 100 ? "text-green-500" : "text-gray-400"}`}>
+                  {aiSnippet.length}/250
+                </span>
               </div>
             </div>
 
@@ -530,6 +579,15 @@ export default function EditBlogPostPage({
             excerpt={excerpt}
             coverImage={coverImage}
             onChange={handleSocialChange}
+          />
+
+          {/* Schema Type */}
+          <SchemaTypeSelector
+            schemaType={schemaType}
+            howToTotalTime={howToTotalTime}
+            howToEstimatedCost={howToEstimatedCost}
+            howToSupply={howToSupply}
+            onChange={handleSchemaChange}
           />
 
           {/* FAQ Builder */}

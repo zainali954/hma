@@ -94,6 +94,11 @@ export async function POST(request: Request) {
       ogImage,
       faqs,
       keyTakeaways,
+      aiSnippet,
+      schemaType,
+      howToTotalTime,
+      howToEstimatedCost,
+      howToSupply,
       noIndex,
       noFollow,
     } = body;
@@ -140,6 +145,11 @@ export async function POST(request: Request) {
       ogImage: ogImage || "",
       faqs: faqs || [],
       keyTakeaways: keyTakeaways || [],
+      aiSnippet: aiSnippet || "",
+      schemaType: schemaType || "Article",
+      howToTotalTime: howToTotalTime || "",
+      howToEstimatedCost: howToEstimatedCost || "",
+      howToSupply: howToSupply || [],
       noIndex: noIndex || false,
       noFollow: noFollow || false,
     });

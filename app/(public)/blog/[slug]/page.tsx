@@ -111,9 +111,15 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
               )}
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 max-w-4xl">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4 max-w-4xl">
                 {post.title}
               </h1>
+
+              {post.aiSnippet && (
+                <p className="text-base sm:text-lg text-gold-200/90 leading-relaxed mb-6 max-w-3xl font-light border-l-2 border-gold-400/40 pl-4">
+                  {post.aiSnippet}
+                </p>
+              )}
 
               <div className="flex flex-wrap items-center gap-4 text-sm text-gray-300">
                 <span className="flex items-center gap-1.5"><FiUser size={14} />{post.author}</span>
@@ -265,31 +271,80 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         </section>
 
-        {/* JSON-LD */}
+        {/* JSON-LD — primary article schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "BlogPosting",
-              headline: post.title,
-              description: post.excerpt,
-              author: {
-                "@type": "Person",
-                name: post.author,
-              },
+              "@type": post.schemaType || "Article",
+              headline: post.seoTitle || post.title,
+              description: post.aiSnippet || post.metaDescription || post.excerpt || "",
+              author: { "@type": "Person", name: post.author },
               datePublished: post.createdAt,
               dateModified: post.updatedAt,
-              ...(post.coverImage
-                ? { image: post.coverImage }
-                : {}),
+              ...(post.coverImage ? { image: post.coverImage } : {}),
               publisher: {
                 "@type": "Organization",
                 name: "HMA Dubai",
+                url: "https://hmaadubai.com",
               },
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": post.canonicalUrl || `https://hmaadubai.com/blog/${post.slug}`,
+              },
+              ...(post.schemaType === "HowTo" && post.howToTotalTime
+                ? { totalTime: post.howToTotalTime }
+                : {}),
+              ...(post.schemaType === "HowTo" && post.howToEstimatedCost
+                ? { estimatedCost: { "@type": "MonetaryAmount", value: post.howToEstimatedCost } }
+                : {}),
+              ...(post.schemaType === "HowTo" && post.howToSupply?.length
+                ? { supply: post.howToSupply.map((s: string) => ({ "@type": "HowToSupply", name: s })) }
+                : {}),
             }),
           }}
         />
+
+        {/* JSON-LD — FAQPage (when FAQs present) */}
+        {post.faqs && post.faqs.length > 0 && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: post.faqs.map((faq: { question: string; answer: string }) => ({
+                  "@type": "Question",
+                  name: faq.question,
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: faq.answer,
+                  },
+                })),
+              }),
+            }}
+          />
+        )}
+
+        {/* JSON-LD — ItemList for Key Takeaways */}
+        {post.keyTakeaways && post.keyTakeaways.length > 0 && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                name: `Key Takeaways — ${post.title}`,
+                itemListElement: post.keyTakeaways.map((item: string, i: number) => ({
+                  "@type": "ListItem",
+                  position: i + 1,
+                  name: item,
+                })),
+              }),
+            }}
+          />
+        )}
       </>
     );
   } catch {

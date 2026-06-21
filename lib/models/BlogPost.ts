@@ -5,6 +5,8 @@ export interface IFaq {
   answer: string;
 }
 
+export type SchemaType = "Article" | "TechArticle" | "HowTo" | "LocalBusiness" | "ProductReview";
+
 export interface IBlogPost extends Document {
   title: string;
   slug: string;
@@ -30,6 +32,12 @@ export interface IBlogPost extends Document {
   // AEO
   faqs: IFaq[];
   keyTakeaways: string[];
+  aiSnippet: string;
+  // Schema
+  schemaType: SchemaType;
+  howToTotalTime: string;
+  howToEstimatedCost: string;
+  howToSupply: string[];
   // Technical
   noIndex: boolean;
   noFollow: boolean;
@@ -71,6 +79,16 @@ const BlogPostSchema = new Schema<IBlogPost>(
     // AEO
     faqs: { type: [FaqSchema], default: [] },
     keyTakeaways: [{ type: String, trim: true }],
+    aiSnippet: { type: String, default: "" },
+    // Schema
+    schemaType: {
+      type: String,
+      enum: ["Article", "TechArticle", "HowTo", "LocalBusiness", "ProductReview"],
+      default: "Article",
+    },
+    howToTotalTime: { type: String, default: "" },
+    howToEstimatedCost: { type: String, default: "" },
+    howToSupply: [{ type: String, trim: true }],
     // Technical
     noIndex: { type: Boolean, default: false },
     noFollow: { type: Boolean, default: false },

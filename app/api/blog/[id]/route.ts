@@ -66,6 +66,11 @@ export async function PUT(request: Request, { params }: RouteParams) {
       ogImage: body.ogImage,
       faqs: body.faqs,
       keyTakeaways: body.keyTakeaways,
+      aiSnippet: body.aiSnippet,
+      schemaType: body.schemaType,
+      howToTotalTime: body.howToTotalTime,
+      howToEstimatedCost: body.howToEstimatedCost,
+      howToSupply: body.howToSupply,
       noIndex: body.noIndex,
       noFollow: body.noFollow,
     };
