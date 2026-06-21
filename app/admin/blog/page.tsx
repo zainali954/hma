@@ -12,6 +12,7 @@ import {
   FiRefreshCw,
 } from "react-icons/fi";
 import { getCached, setCached, bustPrefix } from "@/lib/client-cache";
+import ConfirmModal from "@/components/admin/ConfirmModal";
 
 interface BlogPost {
   _id: string;
@@ -43,6 +44,7 @@ export default function AdminBlogPage() {
   const [filter, setFilter] = useState<"all" | "published" | "draft">("all");
   const [page, setPage] = useState(1);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null);
 
   const fetchPosts = useCallback(async (bust = false) => {
     const key = `blog:admin:${filter}:${submittedSearch}:${page}`;
@@ -117,13 +119,14 @@ export default function AdminBlogPage() {
     }
   };
 
-  const deletePost = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this post?")) return;
+  const deletePost = async () => {
+    if (!deleteTarget) return;
+    const id = deleteTarget._id;
     setActionLoading(`delete-${id}`);
     try {
       await fetch(`/api/blog/${id}`, { method: "DELETE" });
       bustPrefix("blog:admin:");
-      // If deleting the only item on a page > 1, go back
+      setDeleteTarget(null);
       if (posts.length === 1 && page > 1) {
         setPage((p) => p - 1);
       } else {
@@ -261,7 +264,7 @@ export default function AdminBlogPage() {
                       <FiEdit3 size={16} />
                     </Link>
                     <button
-                      onClick={() => deletePost(post._id)}
+                      onClick={() => setDeleteTarget(post)}
                       disabled={!!actionLoading}
                       className="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50"
                       title="Delete"
@@ -327,7 +330,7 @@ export default function AdminBlogPage() {
                           <FiEdit3 size={16} />
                         </Link>
                         <button
-                          onClick={() => deletePost(post._id)}
+                          onClick={() => setDeleteTarget(post)}
                           disabled={!!actionLoading}
                           className="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50"
                           title="Delete"
@@ -372,6 +375,20 @@ export default function AdminBlogPage() {
           )}
         </div>
       )}
+
+      <ConfirmModal
+        open={!!deleteTarget}
+        title="Delete Post"
+        description={
+          deleteTarget
+            ? `"${deleteTarget.title}" will be permanently deleted and cannot be recovered.`
+            : ""
+        }
+        confirmLabel="Delete Post"
+        loading={actionLoading === `delete-${deleteTarget?._id}`}
+        onConfirm={deletePost}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

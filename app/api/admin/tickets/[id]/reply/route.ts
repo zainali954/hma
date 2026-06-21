@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/db";
 import { Ticket } from "@/lib/models/Ticket";
 import { getCurrentUser } from "@/lib/auth";
 import { sendTicketReply } from "@/lib/email";
+import bus from "@/lib/event-bus";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -31,23 +32,36 @@ export async function POST(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
     }
 
-    // Add admin reply to ticket messages
-    ticket.messages.push({
-      sender: "admin",
+    const newMessage = {
+      sender: "admin" as const,
       senderName: user.username,
-      senderEmail: "admin@hmaadubai.com",
+      senderEmail: "admin@hmadubai.com",
       content: content.trim(),
       createdAt: new Date(),
-    });
+    };
 
-    // Auto-set status to in-progress if currently open
+    ticket.messages.push(newMessage);
+
     if (ticket.status === "open") {
       ticket.status = "in-progress";
     }
 
     await ticket.save();
 
-    // Send email to customer (non-blocking)
+    // Push to any open conversation page via SSE (non-blocking)
+    if (ticket.conversationToken) {
+      bus.emit(`conv:${ticket.conversationToken}`, {
+        type: "message",
+        message: {
+          sender: "admin",
+          senderName: user.username,
+          content: content.trim(),
+          createdAt: newMessage.createdAt.toISOString(),
+        },
+      });
+    }
+
+    // Email customer (non-blocking)
     sendTicketReply({
       ticketId: ticket.ticketId,
       customerName: ticket.customerName,
@@ -55,6 +69,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       subject: ticket.subject,
       replyContent: content.trim(),
       adminName: user.username,
+      conversationToken: ticket.conversationToken,
     }).catch((err) => console.error("Email send failed:", err));
 
     return NextResponse.json({ ticket: ticket.toObject() });

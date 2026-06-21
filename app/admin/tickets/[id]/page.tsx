@@ -21,6 +21,7 @@ import {
   FiRefreshCw,
 } from "react-icons/fi";
 import { getCached, setCached, bustCache } from "@/lib/client-cache";
+import ConfirmModal from "@/components/admin/ConfirmModal";
 import {
   Select,
   SelectContent,
@@ -119,6 +120,8 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
   const [sendingNote, setSendingNote] = useState(false);
   const [activeTab, setActiveTab] = useState<"conversation" | "notes">("conversation");
   const [currentId, setCurrentId] = useState<string>("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchTicket = useCallback(async (id: string, bust = false) => {
     const key = `ticket:${id}`;
@@ -225,12 +228,14 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
   };
 
   const handleDelete = async () => {
-    if (!ticket || !confirm("Are you sure you want to delete this ticket? This cannot be undone.")) return;
+    if (!ticket) return;
+    setDeleting(true);
     try {
       await fetch(`/api/admin/tickets/${ticket._id}`, { method: "DELETE" });
       router.push("/admin/tickets");
     } catch (err) {
       console.error("Failed to delete ticket:", err);
+      setDeleting(false);
     }
   };
 
@@ -399,7 +404,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
               <span className="hidden sm:inline">Refresh</span>
             </button>
             <button
-              onClick={handleDelete}
+              onClick={() => setShowDeleteModal(true)}
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-red-200 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
             >
               <FiTrash2 size={14} />
@@ -709,6 +714,20 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        open={showDeleteModal}
+        title="Delete Ticket"
+        description={
+          ticket
+            ? `Ticket ${ticket.ticketId} — "${ticket.subject}" and all its messages will be permanently deleted.`
+            : ""
+        }
+        confirmLabel="Delete Ticket"
+        loading={deleting}
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteModal(false)}
+      />
     </div>
   );
 }

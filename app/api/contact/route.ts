@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { Ticket, generateTicketId } from "@/lib/models/Ticket";
@@ -11,7 +12,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { name, email, phone, subject, category, message, _website } = body;
 
-    // Honeypot check - reject if filled (bot detection)
+    // Honeypot — reject bots silently
     if (_website) {
       return NextResponse.json(
         { success: true, message: "Message sent successfully" },
@@ -28,10 +29,12 @@ export async function POST(request: Request) {
 
     await connectDB();
 
-    // Create a ticket from the contact form submission
     const ticketId = await generateTicketId();
+    const conversationToken = randomUUID();
+
     const ticket = await Ticket.create({
       ticketId,
+      conversationToken,
       customerName: name,
       customerEmail: email,
       customerPhone: phone || "",
@@ -43,17 +46,21 @@ export async function POST(request: Request) {
       messages: [],
     });
 
+    const ticketMongoId: string = ticket._id.toString();
+
     // Send acknowledgment to customer (non-blocking)
     sendContactConfirmation({
       customerName: name,
       customerEmail: email,
       category: category || "general",
       message,
+      conversationToken,
     }).catch((err) => console.error("[email] Customer confirmation failed:", err));
 
     // Notify admin of new ticket (non-blocking)
     sendAdminNewTicketNotification({
       ticketId: ticket.ticketId,
+      ticketMongoId,
       customerName: name,
       customerEmail: email,
       customerPhone: phone || "",

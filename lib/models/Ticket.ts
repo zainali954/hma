@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import mongoose, { Schema, type Document } from "mongoose";
 
 export interface ITicketMessage {
@@ -15,6 +16,7 @@ export interface ITicketNote {
 
 export interface ITicket extends Document {
   ticketId: string;
+  conversationToken: string;
   customerName: string;
   customerEmail: string;
   customerPhone: string;
@@ -49,6 +51,7 @@ const TicketNoteSchema = new Schema<ITicketNote>(
 const TicketSchema = new Schema<ITicket>(
   {
     ticketId: { type: String, required: true, unique: true, index: true },
+    conversationToken: { type: String, unique: true, sparse: true, index: true },
     customerName: { type: String, required: true, trim: true },
     customerEmail: {
       type: String,
@@ -75,6 +78,13 @@ const TicketSchema = new Schema<ITicket>(
   },
   { timestamps: true }
 );
+
+// Auto-generate conversationToken if missing (handles new tickets + legacy tickets on first update)
+TicketSchema.pre("save", async function () {
+  if (!this.conversationToken) {
+    this.conversationToken = randomUUID();
+  }
+});
 
 // Generate unique ticket ID
 export async function generateTicketId(): Promise<string> {

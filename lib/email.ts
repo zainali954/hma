@@ -4,7 +4,7 @@ import nodemailer from "nodemailer";
 const BRAND = {
   name: "HMA Dubai",
   navy: "#0f172a",
-  gold: "#f5c542",
+  gold: "#C59D4B",
   gray: "#6b7280",
   lightGray: "#9ca3af",
   mutedBg: "#f8fafc",
@@ -14,9 +14,10 @@ const BRAND = {
   address: "Office 1106, Burlington Tower, Business Bay, Dubai, UAE",
 } as const;
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 const ADMIN_EMAIL = process.env.ADMIN_NOTIFY_EMAIL || BRAND.email;
 
-// ── Transporter (created once for connection pooling) ──
+// ── Transporter ───────────────────────────────────────
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT) || 587,
@@ -27,7 +28,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// ── HTML escape helper (prevents broken emails & XSS) ─
+// ── HTML escape helper ────────────────────────────────
 function esc(str: string): string {
   return str
     .replace(/&/g, "&amp;")
@@ -37,7 +38,7 @@ function esc(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
-// ── Shared email wrapper (brand header + footer) ──────
+// ── Shared email wrapper ──────────────────────────────
 function emailWrapper(bodyHtml: string): string {
   return `
     <div style="font-family: Arial, Helvetica, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
@@ -80,12 +81,20 @@ const styles = {
     `<tr><td style="padding: 4px 12px 4px 0; color: ${BRAND.gray}; font-size: 13px; white-space: nowrap; vertical-align: top;">${label}</td><td style="padding: 4px 0; font-size: 13px;">${value}</td></tr>`,
   button: (url: string, text: string) =>
     `<div style="text-align: center; margin: 24px 0;">
-      <a href="${esc(url)}" style="display: inline-block; background: ${BRAND.navy}; color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-weight: 600; font-size: 14px;">${esc(text)}</a>
+      <a href="${esc(url)}" style="display: inline-block; background: ${BRAND.navy}; color: #fff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 15px;">${esc(text)}</a>
     </div>`,
   signature: () =>
     `<p style="margin: 16px 0 0; color: ${BRAND.gray}; font-size: 13px;">Warm regards,<br/><strong>${BRAND.name} Support Team</strong></p>`,
   ticketBadge: (id: string) =>
     `<span style="display: inline-block; background: ${BRAND.mutedBg}; color: ${BRAND.navy}; font-family: monospace; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 4px;">#${esc(id)}</span>`,
+  conversationNote: (url: string) =>
+    `<div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 16px 20px; margin: 20px 0;">
+      <p style="margin: 0 0 6px; font-size: 13px; font-weight: 600; color: #0369a1;">Your Conversation Link</p>
+      <p style="margin: 0 0 10px; font-size: 13px; color: #0c4a6e; line-height: 1.5;">
+        This link is unique to your inquiry. Use it any time to view the full conversation history and send follow-up messages — no login required.
+      </p>
+      <a href="${esc(url)}" style="font-size: 12px; color: #0369a1; word-break: break-all;">${esc(url)}</a>
+    </div>`,
 };
 
 // ── Interfaces ────────────────────────────────────────
@@ -106,7 +115,7 @@ export async function sendEmail({
   try {
     if (!process.env.SMTP_HOST || !process.env.SMTP_USER) {
       console.warn(
-        "[email] SMTP not configured — skipping. Set SMTP_HOST, SMTP_USER, SMTP_PASS env vars (see .env.example)."
+        "[email] SMTP not configured — skipping. Set SMTP_HOST, SMTP_USER, SMTP_PASS env vars."
       );
       return false;
     }
@@ -135,16 +144,19 @@ export async function sendContactConfirmation({
   customerEmail,
   category,
   message,
+  conversationToken,
 }: {
   customerName: string;
   customerEmail: string;
   category: string;
   message: string;
+  conversationToken: string;
 }): Promise<boolean> {
   const categoryLabel = esc(
     category.charAt(0).toUpperCase() + category.replace(/-/g, " ").slice(1)
   );
   const summary = message.length > 120 ? esc(message.slice(0, 120)) + "…" : esc(message);
+  const conversationUrl = `${BASE_URL}/conversation/${conversationToken}`;
 
   const html = emailWrapper(`
     ${styles.greet(customerName)}
@@ -161,9 +173,9 @@ export async function sendContactConfirmation({
       ${styles.details("Status", "Open")}
     </table>
 
-    ${styles.paragraph(
-      "If you need to add more details, simply reply to this email and we will attach it to your inquiry."
-    )}
+    ${styles.button(conversationUrl, "View Your Conversation →")}
+
+    ${styles.conversationNote(conversationUrl)}
 
     ${styles.signature()}
   `);
@@ -172,7 +184,6 @@ export async function sendContactConfirmation({
     to: customerEmail,
     subject: `We've received your inquiry — ${BRAND.name}`,
     html,
-    replyTo: ADMIN_EMAIL,
   });
 }
 
@@ -181,6 +192,7 @@ export async function sendContactConfirmation({
 // ═══════════════════════════════════════════════════════
 export async function sendAdminNewTicketNotification({
   ticketId,
+  ticketMongoId,
   customerName,
   customerEmail,
   customerPhone,
@@ -189,6 +201,7 @@ export async function sendAdminNewTicketNotification({
   description,
 }: {
   ticketId: string;
+  ticketMongoId: string;
   customerName: string;
   customerEmail: string;
   customerPhone: string;
@@ -199,9 +212,7 @@ export async function sendAdminNewTicketNotification({
   const categoryLabel = esc(
     category.charAt(0).toUpperCase() + category.replace(/-/g, " ").slice(1)
   );
-  const adminUrl = `${
-    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-  }/admin/tickets`;
+  const adminUrl = `${BASE_URL}/admin/tickets/${esc(ticketMongoId)}`;
 
   const html = emailWrapper(`
     <p style="margin: 0 0 8px; color: #ef4444; font-weight: 600; font-size: 13px;">🔔 NEW INQUIRY</p>
@@ -224,7 +235,7 @@ export async function sendAdminNewTicketNotification({
     <p style="margin: 0 0 8px; font-weight: 600; font-size: 13px; color: ${BRAND.navy};">Customer Message:</p>
     ${styles.callout(`<p style="margin: 0; white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${esc(description)}</p>`)}
 
-    ${styles.button(`${adminUrl}/${esc(ticketId)}`, "View & Reply to Ticket")}
+    ${styles.button(adminUrl, "View & Reply in Admin Panel")}
 
     <p style="margin: 12px 0 0; color: ${BRAND.gray}; font-size: 12px;">
       Tickets are also accessible from the HMA admin dashboard → Tickets.
@@ -239,7 +250,7 @@ export async function sendAdminNewTicketNotification({
 }
 
 // ═══════════════════════════════════════════════════════
-// 3. Ticket reply notification to customer
+// 3. Admin reply — notification to customer with conversation link
 // ═══════════════════════════════════════════════════════
 export async function sendTicketReply({
   ticketId,
@@ -248,6 +259,7 @@ export async function sendTicketReply({
   subject,
   replyContent,
   adminName,
+  conversationToken,
 }: {
   ticketId: string;
   customerName: string;
@@ -255,19 +267,26 @@ export async function sendTicketReply({
   subject: string;
   replyContent: string;
   adminName: string;
+  conversationToken: string;
 }): Promise<boolean> {
+  const conversationUrl = `${BASE_URL}/conversation/${conversationToken}`;
+
   const html = emailWrapper(`
     ${styles.greet(customerName)}
 
     ${styles.paragraph(
-      `Thank you for contacting ${BRAND.name}. Here is a reply from our team regarding ticket ${styles.ticketBadge(ticketId)}:`
+      `You have a new reply from the ${BRAND.name} team regarding your inquiry ${styles.ticketBadge(ticketId)}:`
     )}
 
     ${styles.callout(`<p style="margin: 0; white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${esc(replyContent)}</p>`)}
 
+    ${styles.button(conversationUrl, "View Conversation & Reply →")}
+
     ${styles.paragraph(
-      "If you have any further questions, simply reply to this email and we'll get back to you promptly."
+      "If you have further questions, click the button above to open your conversation page and send a follow-up message directly. No login required."
     )}
+
+    ${styles.conversationNote(conversationUrl)}
 
     <p style="margin: 16px 0 0; color: ${BRAND.gray}; font-size: 13px;">
       — ${esc(adminName)}, ${BRAND.name} Support Team
@@ -276,8 +295,46 @@ export async function sendTicketReply({
 
   return sendEmail({
     to: customerEmail,
-    subject: `[Ticket ${ticketId}] ${esc(subject)}`,
+    subject: `[Reply] ${esc(subject)} — ${BRAND.name}`,
     html,
-    replyTo: ADMIN_EMAIL,
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// 4. Customer reply via conversation page — notify admin
+// ═══════════════════════════════════════════════════════
+export async function sendCustomerReplyNotification({
+  ticketId,
+  ticketMongoId,
+  customerName,
+  customerEmail,
+  subject,
+  replyContent,
+}: {
+  ticketId: string;
+  ticketMongoId: string;
+  customerName: string;
+  customerEmail: string;
+  subject: string;
+  replyContent: string;
+}): Promise<boolean> {
+  const adminUrl = `${BASE_URL}/admin/tickets/${esc(ticketMongoId)}`;
+
+  const html = emailWrapper(`
+    <p style="margin: 0 0 8px; color: #f59e0b; font-weight: 600; font-size: 13px;">💬 CUSTOMER FOLLOW-UP</p>
+
+    ${styles.paragraph(
+      `<strong>${esc(customerName)}</strong> (${esc(customerEmail)}) has sent a follow-up message on ticket ${styles.ticketBadge(ticketId)}:`
+    )}
+
+    ${styles.callout(`<p style="margin: 0; white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${esc(replyContent)}</p>`)}
+
+    ${styles.button(adminUrl, "Reply in Admin Panel")}
+  `);
+
+  return sendEmail({
+    to: ADMIN_EMAIL,
+    subject: `[Follow-up ${ticketId}] ${esc(subject)}`,
+    html,
   });
 }
