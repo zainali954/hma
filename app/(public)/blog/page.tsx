@@ -99,18 +99,21 @@ export default async function BlogPage() {
                     </div>
                   </Link>
                   <div className="p-6">
-                    {post.tags && post.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {post.tags.slice(0, 3).map((tag: string) => (
-                          <span
-                            key={tag}
-                            className="text-xs font-medium text-gold-700 bg-gold-50 px-2.5 py-1 rounded-full"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {(post as any).category && (
+                        <span className="text-xs font-medium text-navy-700 bg-navy-100 px-2.5 py-1 rounded-full">
+                          {(post as any).category}
+                        </span>
+                      )}
+                      {post.tags && post.tags.length > 0 && post.tags.slice(0, 3).map((tag: string) => (
+                        <span
+                          key={tag}
+                          className="text-xs font-medium text-gold-700 bg-gold-50 px-2.5 py-1 rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                     <Link href={`/blog/${post.slug}`} aria-label={`Read ${post.title}`}>
                       <h2 className="text-lg font-bold text-navy-900 mb-3 group-hover:text-gold-600 transition-colors line-clamp-2">
                         {post.title}

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { BlogPost } from "@/lib/models/BlogPost";
-import { ContactMessage } from "@/lib/models/ContactMessage";
+import { Ticket } from "@/lib/models/Ticket";
 import { getCurrentUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -15,12 +15,14 @@ export async function GET() {
 
     await connectDB();
 
-    const [totalPosts, publishedPosts, totalMessages, unreadMessages] =
+    const [totalPosts, publishedPosts, totalTickets, openTickets, inProgressTickets, closedTickets] =
       await Promise.all([
         BlogPost.countDocuments(),
         BlogPost.countDocuments({ published: true }),
-        ContactMessage.countDocuments(),
-        ContactMessage.countDocuments({ read: false }),
+        Ticket.countDocuments(),
+        Ticket.countDocuments({ status: "open" }),
+        Ticket.countDocuments({ status: "in-progress" }),
+        Ticket.countDocuments({ status: "closed" }),
       ]);
 
     // Get recent posts
@@ -30,10 +32,11 @@ export async function GET() {
       .select("title slug published createdAt")
       .lean();
 
-    // Get recent messages
-    const recentMessages = await ContactMessage.find()
-      .sort({ createdAt: -1 })
+    // Get recent tickets
+    const recentTickets = await Ticket.find()
+      .sort({ updatedAt: -1 })
       .limit(5)
+      .select("ticketId customerName subject status priority category createdAt")
       .lean();
 
     return NextResponse.json({
@@ -41,11 +44,13 @@ export async function GET() {
         totalPosts,
         publishedPosts,
         draftPosts: totalPosts - publishedPosts,
-        totalMessages,
-        unreadMessages,
+        totalTickets,
+        openTickets,
+        inProgressTickets,
+        closedTickets,
       },
       recentPosts,
-      recentMessages,
+      recentTickets,
     });
   } catch (error) {
     console.error("Admin stats error:", error);

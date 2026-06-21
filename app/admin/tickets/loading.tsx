@@ -1,4 +1,4 @@
 import Spinner from "@/components/Spinner";
-export default function MessagesLoading() {
+export default function TicketsLoading() {
   return <Spinner />;
 }

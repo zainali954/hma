@@ -19,7 +19,7 @@ const navItems = [
   { href: "/admin",          label: "Dashboard",  icon: FiLayout       },
   { href: "/admin/blog",     label: "Blog Posts", icon: FiFileText     },
   { href: "/admin/settings", label: "Settings",   icon: FiSettings     },
-  { href: "/admin/messages", label: "Messages",   icon: FiMessageSquare },
+  { href: "/admin/tickets",  label: "Tickets",    icon: FiMessageSquare },
 ];
 
 interface AdminSidebarProps {

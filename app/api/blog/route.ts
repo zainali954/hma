@@ -15,8 +15,8 @@ export async function GET(request: Request) {
     const tag = searchParams.get("tag");
     const search = searchParams.get("search");
 
-    // Security: If querying unpublished posts, require auth
-    if (published === "false") {
+    // Require auth for unpublished or all-posts queries
+    if (published === "false" || published === "all") {
       const user = await getCurrentUser();
       if (!user) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -28,10 +28,10 @@ export async function GET(request: Request) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const query: Record<string, any> = {};
 
-    // Public requests can only see published posts
     if (published === "true") query.published = true;
     else if (published === "false") query.published = false;
-    else query.published = true; // Default: only show published to public
+    else if (published === "all") { /* no filter — return all posts for admin */ }
+    else query.published = true; // Default: only published to public
 
     if (tag) query.tags = tag;
     if (search) {
@@ -74,8 +74,29 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { title, content, excerpt, coverImage, tags, published, featured } =
-      body;
+    const {
+      title,
+      content,
+      excerpt,
+      coverImage,
+      tags,
+      published,
+      featured,
+      category,
+      status,
+      publishDate,
+      seoTitle,
+      metaDescription,
+      focusKeyword,
+      canonicalUrl,
+      ogTitle,
+      ogDescription,
+      ogImage,
+      faqs,
+      keyTakeaways,
+      noIndex,
+      noFollow,
+    } = body;
 
     if (!title) {
       return NextResponse.json({ error: "Title is required" }, { status: 400 });
@@ -91,6 +112,12 @@ export async function POST(request: Request) {
       slug = `${slug}-${Date.now()}`;
     }
 
+    // Determine publish status
+    let isPublished = published || false;
+    let postStatus = status || "draft";
+    if (postStatus === "published") isPublished = true;
+    if (postStatus === "draft") isPublished = false;
+
     const post = await BlogPost.create({
       title,
       slug,
@@ -99,8 +126,22 @@ export async function POST(request: Request) {
       coverImage: coverImage || "",
       author: user.username,
       tags: tags || [],
-      published: published || false,
+      category: category || "",
+      published: isPublished,
       featured: featured || false,
+      status: postStatus,
+      publishDate: publishDate || null,
+      seoTitle: seoTitle || "",
+      metaDescription: metaDescription || "",
+      focusKeyword: focusKeyword || "",
+      canonicalUrl: canonicalUrl || "",
+      ogTitle: ogTitle || "",
+      ogDescription: ogDescription || "",
+      ogImage: ogImage || "",
+      faqs: faqs || [],
+      keyTakeaways: keyTakeaways || [],
+      noIndex: noIndex || false,
+      noFollow: noFollow || false,
     });
 
     return NextResponse.json({ post }, { status: 201 });

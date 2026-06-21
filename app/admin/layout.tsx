@@ -11,7 +11,7 @@ const pageTitles: Record<string, string> = {
   "/admin/blog":      "Blog Posts",
   "/admin/blog/new":  "New Post",
   "/admin/settings":  "Settings",
-  "/admin/messages":  "Messages",
+  "/admin/tickets":   "Tickets",
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

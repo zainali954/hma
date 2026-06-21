@@ -191,7 +191,7 @@ export default function AdminSettingsPage() {
       </div>
 
       {/* Tab Content */}
-      <div className="bg-white rounded-xl border border-gray-100 p-8">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
         {activeTab === "general" && (
           <div className="space-y-6">
             <div className="grid sm:grid-cols-2 gap-6">

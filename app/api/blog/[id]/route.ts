@@ -40,7 +40,37 @@ export async function PUT(request: Request, { params }: RouteParams) {
 
     await connectDB();
 
-    const post = await BlogPost.findByIdAndUpdate(id, body, {
+    // Sync published with status
+    let isPublished = body.published;
+    if (body.status === "published") isPublished = true;
+    if (body.status === "draft") isPublished = false;
+
+    const updateFields = {
+      title: body.title,
+      slug: body.slug,
+      excerpt: body.excerpt,
+      content: body.content,
+      coverImage: body.coverImage,
+      tags: body.tags,
+      category: body.category,
+      published: isPublished,
+      featured: body.featured,
+      status: body.status,
+      publishDate: body.publishDate,
+      seoTitle: body.seoTitle,
+      metaDescription: body.metaDescription,
+      focusKeyword: body.focusKeyword,
+      canonicalUrl: body.canonicalUrl,
+      ogTitle: body.ogTitle,
+      ogDescription: body.ogDescription,
+      ogImage: body.ogImage,
+      faqs: body.faqs,
+      keyTakeaways: body.keyTakeaways,
+      noIndex: body.noIndex,
+      noFollow: body.noFollow,
+    };
+
+    const post = await BlogPost.findByIdAndUpdate(id, updateFields, {
       returnDocument: "after",
       runValidators: true,
     });

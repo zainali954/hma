@@ -23,25 +23,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       return { title: "Post Not Found" };
     }
 
+    const robots = post.noIndex || post.noFollow
+      ? {
+          ...(post.noIndex ? { index: false } : {}),
+          ...(post.noFollow ? { follow: false } : {}),
+        }
+      : undefined;
+
     return {
-      title: post.title,
-      description: post.excerpt || `Read about ${post.title} on HMA Dubai blog`,
+      title: post.seoTitle || post.title,
+      description: post.metaDescription || post.excerpt || `Read about ${post.title} on HMA Dubai blog`,
       alternates: {
-        canonical: `https://hmaadubai.com/blog/${post.slug}`,
+        canonical: post.canonicalUrl || `https://hmaadubai.com/blog/${post.slug}`,
       },
+      ...(robots ? { robots } : {}),
       openGraph: {
-        title: `${post.title} | HMA Dubai`,
-        description: post.excerpt || "",
+        title: post.ogTitle || post.seoTitle || `${post.title} | HMA Dubai`,
+        description: post.ogDescription || post.metaDescription || post.excerpt || "",
         type: "article",
         publishedTime: post.createdAt?.toISOString(),
         authors: [post.author],
-        ...(post.coverImage ? { images: [post.coverImage] } : {}),
+        images: post.ogImage
+          ? [post.ogImage]
+          : post.coverImage
+          ? [post.coverImage]
+          : [],
       },
       twitter: {
         card: "summary_large_image",
-        title: post.title,
-        description: post.excerpt || "",
-        ...(post.coverImage ? { images: [post.coverImage] } : {}),
+        title: post.ogTitle || post.seoTitle || post.title,
+        description: post.ogDescription || post.metaDescription || post.excerpt || "",
+        images: post.ogImage
+          ? [post.ogImage]
+          : post.coverImage
+          ? [post.coverImage]
+          : [],
       },
     };
   } catch {
@@ -130,6 +146,45 @@ export default async function BlogPostPage({ params }: Props) {
                 )}
                 <div className="blog-content" dangerouslySetInnerHTML={{ __html: post.content }} />
 
+                {/* Key Takeaways */}
+                {post.keyTakeaways && post.keyTakeaways.length > 0 && (
+                  <div className="mt-10 p-6 bg-navy-950 rounded-xl">
+                    <h3 className="text-sm font-bold uppercase tracking-widest text-gold-400 mb-4">Key Takeaways</h3>
+                    <ul className="space-y-3">
+                      {post.keyTakeaways.map((takeaway: string, i: number) => (
+                        <li key={i} className="flex items-start gap-3 text-gray-300 text-sm leading-relaxed">
+                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-gold-400/20 text-gold-400 flex items-center justify-center text-xs font-bold mt-0.5">
+                            {i + 1}
+                          </span>
+                          {takeaway}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* FAQ Section */}
+                {post.faqs && post.faqs.length > 0 && (
+                  <div className="mt-10">
+                    <h3 className="text-lg font-bold text-navy-900 mb-6">Frequently Asked Questions</h3>
+                    <div className="space-y-4">
+                      {post.faqs.map((faq: { question: string; answer: string }, i: number) => (
+                        <details key={i} className="group bg-gray-50 rounded-xl border border-gray-200 overflow-hidden">
+                          <summary className="flex items-center justify-between px-5 py-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden hover:bg-gray-100 transition-colors">
+                            <span className="text-sm font-semibold text-navy-900 pr-4">{faq.question}</span>
+                            <svg className="w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </summary>
+                          <div className="px-5 pb-4">
+                            <p className="text-sm text-gray-600 leading-relaxed">{faq.answer}</p>
+                          </div>
+                        </details>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="mt-12 pt-8 border-t border-gray-100">
                   <Link href="/blog" className="group inline-flex items-center gap-2 text-navy-900 font-medium hover:text-gold-600 transition-colors">
                     <FiArrowLeft className="group-hover:-translate-x-1 transition-transform" />
@@ -146,6 +201,11 @@ export default async function BlogPostPage({ params }: Props) {
                   {post.tags && post.tags.length > 0 && (
                     <div className="bg-[#F0F0F0] rounded-xl p-5 border border-gray-200">
                       <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Tags</h3>
+                      {post.category && (
+                        <span className="block text-xs font-medium text-navy-600 mb-2">
+                          Category: {post.category}
+                        </span>
+                      )}
                       <div className="flex flex-wrap gap-2">
                         {post.tags.map((tag: string) => (
                           <span key={tag} className="text-xs font-medium bg-white border border-gray-200 text-navy-700 px-3 py-1.5 rounded-full">

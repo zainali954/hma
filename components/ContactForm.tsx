@@ -10,6 +10,7 @@ export default function ContactForm() {
     email: "",
     phone: "",
     subject: "",
+    category: "general",
     message: "",
     _website: "",
   });
@@ -32,7 +33,7 @@ export default function ContactForm() {
       if (!res.ok) throw new Error("Failed to send message");
 
       setSubmitted(true);
-      setFormData({ name: "", email: "", phone: "", subject: "", message: "", _website: "" });
+      setFormData({ name: "", email: "", phone: "", subject: "", category: "general", message: "", _website: "" });
     } catch {
       setError("Failed to send message. Please try again.");
     } finally {
@@ -41,7 +42,7 @@ export default function ContactForm() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -117,6 +118,24 @@ export default function ContactForm() {
           </div>
 
           <div className="grid sm:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-navy-900 mb-2">
+                Category
+              </label>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 outline-none transition-all bg-white"
+              >
+                <option value="general">General Inquiry</option>
+                <option value="business-setup">Business Setup</option>
+                <option value="tax-vat">Tax & VAT</option>
+                <option value="accounting">Accounting</option>
+                <option value="visa">Visa</option>
+                <option value="audit">Audit</option>
+              </select>
+            </div>
             <div>
               <label className="block text-sm font-medium text-navy-900 mb-2">
                 Phone Number
