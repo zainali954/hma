@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RouteChangeLoader from "@/components/RouteChangeLoader";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 
 export default function PublicLayout({
   children,
@@ -28,6 +29,7 @@ export default function PublicLayout({
       </section>
 
       <Footer />
+      <WhatsAppFloat />
     </>
   );
 }

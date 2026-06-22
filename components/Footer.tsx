@@ -1,12 +1,19 @@
 import Link from "next/link";
 import { FiMapPin, FiPhone, FiMail, FiFacebook, FiTwitter, FiInstagram, FiLinkedin, FiMessageCircle } from "react-icons/fi";
 
-const footerServices = [
-  { label: "Business Setup in Dubai",   href: "/services/business-setup"          },
-  { label: "Golden Visa & Residency",   href: "/services/golden-visa"             },
-  { label: "Tax & VAT Compliance",      href: "/services/tax-vat-compliance"      },
-  { label: "Accounting & Bookkeeping",  href: "/services/accounting-bookkeeping"  },
-  { label: "Audit & Assurance",         href: "/services/audit-assurance"         },
+const startServices = [
+  { label: "Business Setup in Dubai",  href: "/services/business-setup"  },
+  { label: "Mainland Formation",       href: "/services/business-setup"  },
+  { label: "Free Zone Formation",      href: "/services/business-setup"  },
+  { label: "Offshore Formation",       href: "/services/business-setup"  },
+  { label: "Golden Visa & Residency",  href: "/services/golden-visa"     },
+];
+
+const complyServices = [
+  { label: "Corporate Tax",            href: "/services/tax-vat-compliance"     },
+  { label: "VAT Compliance",           href: "/services/tax-vat-compliance"     },
+  { label: "Accounting & Bookkeeping", href: "/services/accounting-bookkeeping" },
+  { label: "Audit & Assurance",        href: "/services/audit-assurance"        },
 ];
 
 export default function Footer() {
@@ -15,23 +22,34 @@ export default function Footer() {
       {/* Main footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Services */}
+          {/* Start Your Business */}
           <div>
-            <h3 className="text-base font-bold text-white mb-5 uppercase tracking-wider">
-              Our Services
+            <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-gold-400 mb-2">Step One</p>
+            <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">
+              Start Your Business
             </h3>
             <ul className="space-y-2.5">
-              {footerServices.map((s) => (
-                <li key={s.href}>
-                  <Link
-                    href={s.href}
-                    className="text-gray-300 hover:text-gold-400 transition-colors text-sm"
-                  >
+              {startServices.map((s) => (
+                <li key={s.label}>
+                  <Link href={s.href} className="text-gray-400 hover:text-gold-400 transition-colors text-sm">
                     {s.label}
                   </Link>
                 </li>
               ))}
             </ul>
+            <div className="mt-5 pt-4 border-t border-navy-800">
+              <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-gold-400 mb-2">Step Two</p>
+              <h3 className="text-sm font-bold text-white mb-3 uppercase tracking-wider">Stay Compliant</h3>
+              <ul className="space-y-2.5">
+                {complyServices.map((s) => (
+                  <li key={s.label}>
+                    <Link href={s.href} className="text-gray-400 hover:text-gold-400 transition-colors text-sm">
+                      {s.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           {/* Location */}
