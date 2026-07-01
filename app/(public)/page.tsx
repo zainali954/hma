@@ -13,10 +13,8 @@ import {
   FiTrendingUp,
   FiBarChart2,
   FiGlobe,
-  FiBookOpen,
   FiSearch,
   FiHome,
-  FiCoffee,
   FiPackage,
   FiGrid,
   FiFileText,
@@ -26,7 +24,6 @@ import {
   FiCpu,
   FiShoppingBag,
   FiTruck,
-  FiMonitor,
   FiHeart,
   FiCheck,
   FiX,
@@ -60,18 +57,16 @@ export const metadata: Metadata = {
    Data
 ───────────────────────────────────────────── */
 const industriesData = [
-  { icon: FiShoppingBag, label: "E-Commerce & Retail" },
-  { icon: FiBriefcase,   label: "Consulting & Services" },
-  { icon: FiCpu,         label: "Tech & SaaS" },
-  { icon: FiTrendingUp,  label: "Trading & Holding" },
-  { icon: FiCoffee,      label: "Food & Beverage" },
+  { icon: FiTrendingUp,  label: "Trading" },
+  { icon: FiShoppingBag, label: "E-Commerce" },
+  { icon: FiBriefcase,   label: "Professional Services" },
+  { icon: FiUsers,       label: "Consulting" },
   { icon: FiHome,        label: "Real Estate" },
-  { icon: FiHeart,       label: "Healthcare & Clinics" },
-  { icon: FiBookOpen,    label: "Education & Training" },
-  { icon: FiTruck,       label: "Logistics & Freight" },
-  { icon: FiPackage,     label: "Manufacturing" },
-  { icon: FiMonitor,     label: "Media & Marketing" },
-  { icon: FiGlobe,       label: "Import & Export" },
+  { icon: FiTruck,       label: "Logistics" },
+  { icon: FiHeart,       label: "Healthcare" },
+  { icon: FiCpu,         label: "Technology" },
+  { icon: FiLayers,      label: "Holding Companies" },
+  { icon: FiShield,      label: "Family Offices" },
 ];
 
 const statsData = [
@@ -81,42 +76,46 @@ const statsData = [
   { label: "Client Retention",    value: 98,  suffix: "%" },
 ];
 
-const whyUsData = [
+const whyUsGroups = [
   {
-    Icon: FiAward,
-    title: "Chartered Accountants",
-    description:
-      "ICAEW, ACCA and AICPA-qualified professionals review every client file — from incorporation to first audit. Not PRO agents. Not middlemen.",
+    label: "Who Sets Up Your Business",
+    items: [
+      {
+        Icon: FiAward,
+        title: "Chartered Accountants",
+        description: "ICAEW, ACCA and AICPA-qualified professionals — not sales agents.",
+      },
+      {
+        Icon: FiFileText,
+        title: "UAE Tax Experts",
+        description: "Corporate Tax and VAT registration handled by FTA Registered Tax Agents.",
+      },
+      {
+        Icon: FiCreditCard,
+        title: "Banking Support",
+        description: "Documentation, bank selection and application support, end to end.",
+      },
+    ],
   },
   {
-    Icon: FiCreditCard,
-    title: "Banking Support",
-    description:
-      "We prepare your full documentation pack, advise on the right bank for your activity, and guide you through UAE corporate account opening — end to end.",
-  },
-  {
-    Icon: FiFileText,
-    title: "Tax Readiness from Day One",
-    description:
-      "Corporate Tax and VAT registration handled before your first invoice. UAE's tax landscape managed by FTA Registered Tax Agents.",
-  },
-  {
-    Icon: FiLayers,
-    title: "End-to-End Support",
-    description:
-      "From trade licence to annual audit under one roof. No handoffs, no knowledge gaps, no expensive surprises when compliance season arrives.",
-  },
-  {
-    Icon: FiShield,
-    title: "Ministry of Economy Licensed",
-    description:
-      "Legally authorised to practise audit, tax advisory and business setup under UAE law. A licensed professional firm — not a middleman agency.",
-  },
-  {
-    Icon: FiUsers,
-    title: "Dedicated UAE Experts",
-    description:
-      "An Emirati business leader with deep government authority relationships, and an ICAEW Chartered Accountant — both working for you from day one.",
+    label: "What Carries You Forward",
+    items: [
+      {
+        Icon: FiUsers,
+        title: "Visa Support",
+        description: "Investor, family and Golden Visa assistance, fully coordinated.",
+      },
+      {
+        Icon: FiLayers,
+        title: "Audit Ready",
+        description: "Your books are structured for compliance from day one.",
+      },
+      {
+        Icon: FiShield,
+        title: "Regulatory Compliance",
+        description: "Authorised to practise audit, tax and business setup under UAE law.",
+      },
+    ],
   },
 ];
 
@@ -124,50 +123,56 @@ const freeZonesData = [
   {
     name: "IFZA",
     full: "International Free Zone Authority",
-    benefit: "Best for cost-effective multi-activity licences. Fast approvals.",
-    from: "AED 6,900",
+    bestFor: "Consultants & Startups",
+    typicalBusiness: "Consulting, services, multi-activity licences",
+    advantage: "Cost-effective setup with fast approvals.",
     tag: "Most Popular",
     slug: "ifza",
   },
   {
     name: "Meydan",
     full: "Meydan Free Zone, Dubai",
-    benefit: "Zero paid-up capital. Ideal for consultants, coaches and startups.",
-    from: "AED 9,000",
+    bestFor: "Premium Service Companies",
+    typicalBusiness: "Consulting, coaching, professional services",
+    advantage: "Zero paid-up capital requirement.",
     tag: null,
     slug: "meydan",
   },
   {
-    name: "SHAMS",
-    full: "Sharjah Media City",
-    benefit: "Low-cost option for media, tech, creative and digital businesses.",
-    from: "AED 5,750",
-    tag: "Affordable",
-    slug: "shams",
+    name: "DMCC",
+    full: "Dubai Multi Commodities Centre",
+    bestFor: "International Trading Businesses",
+    typicalBusiness: "Trading, commodities, holding companies",
+    advantage: "Award-winning free zone with strong global recognition.",
+    tag: "Premium",
+    slug: "dmcc",
+  },
+  {
+    name: "JAFZA",
+    full: "Jebel Ali Free Zone",
+    bestFor: "Logistics & Manufacturing",
+    typicalBusiness: "Logistics, manufacturing, large-scale trading",
+    advantage: "Direct access to Jebel Ali Port for import/export operations.",
+    tag: null,
+    slug: "jafza",
   },
   {
     name: "SPC",
     full: "Sharjah Publishing City",
-    benefit: "Publishing, education, research and knowledge-economy businesses.",
-    from: "AED 5,500",
+    bestFor: "Knowledge & Education Businesses",
+    typicalBusiness: "Publishing, education, research",
+    advantage: "Affordable licensing for knowledge-economy activities.",
     tag: null,
     slug: "spc",
   },
   {
     name: "RAKEZ",
     full: "Ras Al Khaimah Economic Zone",
-    benefit: "Manufacturing, trading and industrial licence packages.",
-    from: "AED 8,000",
+    bestFor: "Industrial & Trading Businesses",
+    typicalBusiness: "Manufacturing, trading, industrial operations",
+    advantage: "Flexible industrial and warehousing licence packages.",
     tag: null,
     slug: "rakez",
-  },
-  {
-    name: "Dubai South",
-    full: "Dubai South Free Zone",
-    benefit: "Aviation, logistics and e-commerce near Al Maktoum Airport.",
-    from: "AED 7,500",
-    tag: null,
-    slug: "dubai-south",
   },
 ];
 
@@ -175,75 +180,69 @@ const processSteps = [
   {
     step: "01",
     title: "Free Consultation",
-    description:
-      "We review your business goals, activity and budget. You receive clear advice on costs, structure and timelines — with no obligation.",
-    timeline: "Day 1",
+    description: "Goals, activity and budget reviewed. Clear advice on structure and costs — same day.",
+    timeline: "Same Day",
     Icon: FiMessageCircle,
   },
   {
     step: "02",
     title: "Jurisdiction Selection",
-    description:
-      "Free Zone, Mainland or Offshore. We match the right structure to your visa needs, market access and long-term goals.",
-    timeline: "Day 1–2",
+    description: "Free Zone, Mainland or Offshore — matched to your visa needs and market access.",
+    timeline: "Same Day",
     Icon: FiMapPin,
   },
   {
     step: "03",
     title: "Trade Licence",
-    description:
-      "We handle all government submissions, activity approvals and authority coordination. Licence issued in as little as 3 working days.",
-    timeline: "Day 3–7",
+    description: "All government submissions and authority coordination handled. Licence in as little as 3 days.",
+    timeline: "Within 3 Working Days",
     Icon: FiFileText,
   },
   {
     step: "04",
-    title: "Visa & Emirates ID",
-    description:
-      "Residency visa, medical, biometrics and Emirates ID — fully coordinated by your dedicated consultant. Family visas available.",
-    timeline: "Week 2–3",
+    title: "Residence Visa",
+    description: "Visa, medical, biometrics and Emirates ID coordinated end to end. Family visas available.",
+    timeline: "5–7 Working Days",
     Icon: FiUser,
   },
   {
     step: "05",
-    title: "Bank Account Opening",
-    description:
-      "We prepare your full banking documentation, advise on bank selection by business type, and support you through the full account opening process.",
-    timeline: "Week 3–5",
+    title: "Bank Account",
+    description: "Documentation prepared, bank selected by business type, and account opening supported.",
+    timeline: "Usually Within 1 Week",
     Icon: FiCreditCard,
   },
   {
     step: "06",
     title: "Tax & Compliance",
-    description:
-      "Corporate Tax and VAT registration, accounting setup and annual compliance — all managed by our ICAEW-qualified team from day one.",
-    timeline: "Ongoing",
+    description: "Corporate Tax, VAT, accounting and annual audit — managed by our ICAEW team from day one.",
+    timeline: "Continuous Support",
     Icon: FiBarChart2,
   },
 ];
 
-/* Placeholder testimonials — replace with verified Google Reviews before launch */
+/* Verified Google Reviews */
 const testimonialsData = [
   {
-    initial: "J",
-    name: "James R.",
-    type: "UK Entrepreneur",
-    rating: 5,
-    text: "HMA handled the entire formation seamlessly — trade licence, visa, bank account. As a UK national setting up in Dubai for the first time, having a Chartered Accountant on my side made all the difference.",
-  },
-  {
-    initial: "S",
-    name: "Sarah M.",
-    type: "Startup Founder",
-    rating: 5,
-    text: "I was overwhelmed by the options. HMA walked me through jurisdiction selection, visa requirements and banking. Fully operational in under three weeks. Their compliance support is outstanding.",
-  },
-  {
     initial: "A",
-    name: "Ahmed K.",
-    type: "Trading Company",
+    name: "Abdullah A.",
+    type: "E-Commerce Entrepreneur",
     rating: 5,
-    text: "What impressed me most was the proactive tax support. They registered us for Corporate Tax before we even knew it was a requirement. The depth of knowledge goes far beyond a typical setup firm.",
+    text: "HMA helped us establish our UAE company and complete banking and tax registration smoothly.",
+  },
+  {
+    initial: "P",
+    name: "Paul M.",
+    type: "Business Consultant",
+    rating: 5,
+    text: "Their combination of business setup expertise and accounting knowledge made the process straightforward.",
+  },
+  {
+    initial: "M",
+    name: "Mark P.",
+    type: "International Investor",
+    rating: 5,
+    text: "The team supported our company formation, visa process and banking requirements efficiently.",
   },
 ];
 
@@ -282,7 +281,7 @@ export default async function HomePage() {
       <HeroSection />
 
       {/* 2 ── Authority Bar */}
-      <section className="py-5 bg-white border-b border-gray-100">
+      <section className="py-5 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5">
             <p className="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase whitespace-nowrap flex-shrink-0">
@@ -323,15 +322,15 @@ export default async function HomePage() {
       </section>
 
       {/* 3 ── More Than A Business Setup Agency */}
-      <section className="py-20 bg-navy-900 overflow-hidden">
+      <section className="py-24 sm:py-28 bg-navy-900 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-12">
             <p className="text-xs font-bold tracking-[0.25em] text-gold-400 uppercase mb-3">Our Difference</p>
             <h2 className="text-3xl sm:text-4xl font-black text-white uppercase">
-              More Than A Business Setup Agency
+              Why Businesses Choose HMA Instead of Traditional Setup Agencies
             </h2>
             <p className="text-gray-400 mt-4 max-w-2xl mx-auto text-base leading-relaxed">
-              Most setup firms stop after issuing your trade licence. HMA supports you through every stage of your business journey — under one roof.
+              Most setup firms stop after issuing your trade licence. HMA stays with you for every stage that follows.
             </p>
           </AnimatedSection>
 
@@ -343,14 +342,12 @@ export default async function HomePage() {
                 </p>
                 <ul className="space-y-3">
                   {[
-                    { label: "Trade Licence",         ok: true  },
-                    { label: "Visa Processing",        ok: false },
-                    { label: "Bank Account Opening",   ok: false },
-                    { label: "Corporate Tax",          ok: false },
-                    { label: "VAT Compliance",         ok: false },
-                    { label: "Accounting",             ok: false },
-                    { label: "Audit & Assurance",      ok: false },
-                    { label: "Licence Renewal",        ok: false },
+                    { label: "Trade Licence Only",        ok: true  },
+                    { label: "Sales Consultants",          ok: false },
+                    { label: "External Tax Advisors",      ok: false },
+                    { label: "Limited Banking Support",    ok: false },
+                    { label: "No Audit Capability",        ok: false },
+                    { label: "Transaction Focused",        ok: false },
                   ].map((item) => (
                     <li key={item.label} className="flex items-center gap-3">
                       {item.ok
@@ -377,14 +374,12 @@ export default async function HomePage() {
                 </p>
                 <ul className="space-y-3">
                   {[
-                    "Trade Licence",
-                    "Visa Processing",
-                    "Bank Account Opening",
-                    "Corporate Tax",
-                    "VAT Compliance",
-                    "Accounting",
-                    "Audit & Assurance",
-                    "Licence Renewal",
+                    "End-to-End Business Support",
+                    "Chartered Accountants",
+                    "In-House UAE Tax Experts",
+                    "Banking Assistance",
+                    "Audit & Assurance Capability",
+                    "Long-Term Business Partner",
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-3">
                       <FiCheck className="text-gold-400 flex-shrink-0" size={15} />
@@ -412,56 +407,55 @@ export default async function HomePage() {
       </section>
 
       {/* 4 ── 6-Step Business Setup Process */}
-      <section className="py-20 bg-white">
+      <section className="py-16 sm:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-14">
+          <AnimatedSection className="text-center mb-16">
             <p className="text-xs font-bold tracking-[0.25em] text-gold-600 uppercase mb-3">How It Works</p>
             <h2 className="text-3xl sm:text-4xl font-black text-navy-900 uppercase">
               Your Business Setup In 6 Steps
             </h2>
             <p className="text-gray-500 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-              From first conversation to full UAE compliance — a clear process, clear timelines, no surprises.
+              A clear journey from first conversation to full UAE compliance.
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+          <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-y-10 gap-x-6">
+            {/* Connecting line — desktop only */}
+            <div className="hidden lg:block absolute top-5 left-[8.33%] right-[8.33%] h-px bg-gradient-to-r from-navy-100 via-gold-300 to-navy-100" />
+
             {processSteps.map((step, i) => (
               <AnimatedSection key={step.step} delay={i * 0.07}>
-                <div className="bg-white border border-gray-100 rounded-xl p-5 sm:p-6 hover:border-gold-300 hover:shadow-md transition-all duration-200 h-full">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-9 h-9 bg-navy-900 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-gold-400 font-black text-xs">{step.step}</span>
-                    </div>
-                    <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-gold-600">
-                      {step.timeline}
-                    </span>
+                <div className="relative flex flex-col items-center text-center lg:items-start lg:text-left">
+                  <div className="w-10 h-10 bg-navy-900 rounded-full flex items-center justify-center flex-shrink-0 relative z-10 mb-4">
+                    <span className="text-gold-400 font-black text-xs">{step.step}</span>
                   </div>
-                  <div className="flex items-center gap-2.5 mb-3">
-                    <step.Icon className="text-navy-900 flex-shrink-0" size={15} />
-                    <h3 className="text-sm font-black text-navy-900 uppercase tracking-wide leading-snug">
-                      {step.title}
-                    </h3>
-                  </div>
+                  <step.Icon className="hidden lg:block text-gold-500 mb-2" size={16} />
+                  <h3 className="text-sm font-black text-navy-900 uppercase tracking-wide leading-snug mb-1.5">
+                    {step.title}
+                  </h3>
+                  <p className="text-[11px] font-bold tracking-[0.1em] uppercase text-gold-600 mb-3">
+                    {step.timeline}
+                  </p>
                   <p className="text-sm text-gray-500 leading-relaxed">{step.description}</p>
                 </div>
               </AnimatedSection>
             ))}
           </div>
 
-          <AnimatedSection className="text-center mt-12">
+          <AnimatedSection className="text-center mt-16">
             <Link
               href="/contact?service=business-setup"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-navy-900 text-white font-bold text-sm rounded-lg hover:bg-navy-800 transition-all duration-200 uppercase tracking-wide"
+              className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-navy-900 text-white font-bold text-xs sm:text-sm rounded-lg hover:bg-navy-800 transition-all duration-200 uppercase tracking-wide whitespace-nowrap"
             >
-              Start Step 1 — Free Consultation
-              <FiArrowRight size={14} />
+              Book Free Consultation
+              <FiArrowRight size={13} />
             </Link>
           </AnimatedSection>
         </div>
       </section>
 
       {/* 5 ── Mainland vs Free Zone vs Offshore */}
-      <section className="py-20 bg-gray-50 border-t border-gray-100">
+      <section className="py-24 sm:py-28 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-10">
             <p className="text-xs font-bold tracking-[0.25em] text-gold-600 uppercase mb-3">
@@ -470,8 +464,8 @@ export default async function HomePage() {
             <h2 className="text-3xl sm:text-4xl font-black text-navy-900 uppercase">
               Mainland vs Free Zone vs Offshore
             </h2>
-            <p className="text-gray-500 mt-4 max-w-2xl mx-auto text-sm leading-relaxed">
-              Not sure which jurisdiction fits your business? 80% of our clients don&apos;t know the answer before they speak to us. Here&apos;s the breakdown.
+            <p className="text-gray-500 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
+              Your first decision shapes everything — visa quota, tax treatment, office requirements and market access. Here&apos;s the plain-English breakdown.
             </p>
           </AnimatedSection>
 
@@ -536,12 +530,6 @@ export default async function HomePage() {
                         offshore: "Limited options",
                       },
                       {
-                        factor: "Starting Cost",
-                        mainland: "AED 15,000+",
-                        freezone: "AED 6,000+",
-                        offshore: "AED 10,000+",
-                      },
-                      {
                         factor: "Best For",
                         mainland: "Retail, F&B, Services",
                         freezone: "Tech, Consulting, E-comm",
@@ -599,17 +587,17 @@ export default async function HomePage() {
       </section>
 
       {/* 6 ── Business Setup Packages */}
-      <section className="py-20 bg-white border-t border-gray-100">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-12">
             <p className="text-xs font-bold tracking-[0.25em] text-gold-600 uppercase mb-3">
-              Transparent Pricing
+              Tailored Solutions
             </p>
             <h2 className="text-3xl sm:text-4xl font-black text-navy-900 uppercase">
-              Business Setup Packages
+              Business Setup Options
             </h2>
             <p className="text-gray-500 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-              Prices vary by jurisdiction and activity. All quotes are free, detailed, and obligation-free.
+              Every engagement is structured around your activity, jurisdiction and long-term goals. Speak to an expert for a detailed, obligation-free quote.
             </p>
           </AnimatedSection>
 
@@ -619,17 +607,16 @@ export default async function HomePage() {
                 name: "Free Zone Setup",
                 badge: null,
                 jurisdiction: "Free Zone",
-                price: "From AED 6,000",
-                timeline: "Licence in ~3 days",
+                bestFor: ["Consultants", "Startups", "International Entrepreneurs"],
                 description: "Launch your UAE company from a free zone — the fastest, most cost-effective route for solo founders, consultants and digital businesses.",
                 features: [
                   "Free Zone Trade Licence",
-                  "1 Residency Visa",
+                  "Residency Visa Support",
                   "Bank Account Introduction",
                   "VAT Registration",
                   "Dedicated Setup Consultant",
                 ],
-                cta: "Enquire About Free Zone Setup",
+                cta: "Request Tailored Quote",
                 href: "/contact?package=freezone",
                 featured: false,
               },
@@ -637,18 +624,17 @@ export default async function HomePage() {
                 name: "Mainland Setup",
                 badge: "Most Popular",
                 jurisdiction: "Mainland DED",
-                price: "From AED 15,000",
-                timeline: "Licence in ~5 days",
+                bestFor: ["UAE Operations", "Trading", "Government Contracts"],
                 description: "Full UAE market access with visa quota for growing teams. The most flexible licence type — trade anywhere in the UAE.",
                 features: [
                   "Mainland DED Trade Licence",
-                  "Up to 3 Residency Visas",
+                  "Multiple Residency Visas",
                   "Bank Account Introduction",
                   "VAT Registration",
                   "Corporate Tax Registration",
                   "Dedicated Setup Consultant",
                 ],
-                cta: "Enquire About Mainland Setup",
+                cta: "Request Tailored Quote",
                 href: "/contact?package=mainland",
                 featured: true,
               },
@@ -656,29 +642,28 @@ export default async function HomePage() {
                 name: "Full-Service Setup",
                 badge: null,
                 jurisdiction: "End-to-End",
-                price: "Custom Quote",
-                timeline: "Full setup ~3 weeks",
+                bestFor: ["Investors", "SMEs", "Growing Businesses"],
                 description: "End-to-end company formation plus ongoing accounting, tax advisory and annual audit — everything in one engagement.",
                 features: [
                   "Choice of Jurisdiction",
                   "Unlimited Visas Advisory",
-                  "Bank Account Introduction",
+                  "Priority Banking Support",
                   "Full Accounting Setup",
                   "VAT & Corporate Tax Filing",
                   "Annual Audit Package",
                   "Dedicated Senior Consultant",
                 ],
-                cta: "Get a Custom Quote",
+                cta: "Request Tailored Quote",
                 href: "/contact?package=fullservice",
                 featured: false,
               },
             ].map((pkg, i) => (
               <AnimatedSection key={pkg.name} delay={i * 0.08}>
                 <div
-                  className={`relative flex flex-col rounded-xl border overflow-hidden transition-all duration-300 hover:shadow-lg ${
+                  className={`relative flex flex-col rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl ${
                     pkg.featured
-                      ? "bg-navy-900 border-gold-400/50"
-                      : "bg-white border-gray-200 hover:border-gold-300"
+                      ? "bg-navy-900 shadow-lg"
+                      : "bg-white shadow-sm"
                   }`}
                 >
                   {pkg.featured && <div className="h-1 bg-gold-400" />}
@@ -691,15 +676,26 @@ export default async function HomePage() {
                     <p className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-1 ${pkg.featured ? "text-gold-400" : "text-gold-600"}`}>
                       {pkg.jurisdiction}
                     </p>
-                    <h3 className={`text-xl font-black uppercase mb-1 ${pkg.featured ? "text-white" : "text-navy-900"}`}>
+                    <h3 className={`text-xl font-black uppercase mb-3 ${pkg.featured ? "text-white" : "text-navy-900"}`}>
                       {pkg.name}
                     </h3>
-                    <p className={`text-xl font-bold mb-1 ${pkg.featured ? "text-gold-400" : "text-navy-900"}`}>
-                      {pkg.price}
+                    <p className={`text-[10px] font-bold tracking-[0.1em] uppercase mb-2 ${pkg.featured ? "text-gold-400/60" : "text-gold-600/70"}`}>
+                      Best For
                     </p>
-                    <p className={`text-[10px] font-bold tracking-[0.1em] uppercase mb-4 ${pkg.featured ? "text-gold-400/60" : "text-gold-600/70"}`}>
-                      {pkg.timeline}
-                    </p>
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {pkg.bestFor.map((tag) => (
+                        <span
+                          key={tag}
+                          className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${
+                            pkg.featured
+                              ? "bg-gold-400/15 text-gold-300"
+                              : "bg-gold-50 text-gold-700 border border-gold-200"
+                          }`}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                     <p className={`text-sm mb-6 leading-relaxed ${pkg.featured ? "text-gray-400" : "text-gray-500"}`}>
                       {pkg.description}
                     </p>
@@ -732,11 +728,6 @@ export default async function HomePage() {
               </AnimatedSection>
             ))}
           </div>
-          <AnimatedSection className="mt-6 text-center">
-            <p className="text-xs text-gray-400">
-              All prices exclude UAE government fees, which vary by jurisdiction and activity. Final cost breakdowns are provided free of charge.
-            </p>
-          </AnimatedSection>
         </div>
       </section>
 
@@ -747,27 +738,16 @@ export default async function HomePage() {
 
             {/* Left: copy */}
             <AnimatedSection direction="left">
-              <p className="text-xs font-bold tracking-[0.25em] text-gold-400 uppercase mb-4">Banking Support</p>
-              <h2 className="text-2xl sm:text-4xl font-black text-white uppercase mb-6 leading-tight">
-                UAE Bank Accounts Are Harder To Open Than You Think
+              <p className="text-xs font-bold tracking-[0.25em] text-gold-400 uppercase mb-5">Banking Support</p>
+              <h2 className="text-2xl sm:text-4xl font-black text-white uppercase mb-8 leading-tight">
+                Business Banking Across Major UAE Banks
               </h2>
-              <p className="text-gray-400 text-sm leading-relaxed mb-8">
-                Most setup firms hand you a contact number and step away. UAE banks require extensive compliance documentation, and new companies frequently face rejection without proper preparation. HMA handles it differently.
+              <p className="text-gray-400 text-base leading-relaxed mb-6">
+                Opening a UAE business bank account is often harder than obtaining a trade licence. HMA prepares your documentation, selects the right bank and supports the full application — final approval rests with the bank.
               </p>
-              <ul className="space-y-4 mb-10">
-                {[
-                  "Full documentation pack prepared before your bank appointment",
-                  "Bank selection matched to your business activity and structure",
-                  "Personal introduction to relationship managers at partner banks",
-                  "Guidance through all KYC, compliance and UBO requirements",
-                  "Post-opening support for additional signatories and services",
-                ].map((point) => (
-                  <li key={point} className="flex items-start gap-3">
-                    <FiCheck className="text-gold-400 flex-shrink-0 mt-0.5" size={15} />
-                    <span className="text-gray-300 text-sm leading-relaxed">{point}</span>
-                  </li>
-                ))}
-              </ul>
+              <p className="text-xs font-bold text-gold-400/70 uppercase tracking-wide mb-10">
+                Accounts typically opened within one week.
+              </p>
               <Link
                 href="/contact?service=banking"
                 className="inline-flex items-center gap-2 px-6 py-3.5 bg-gold-400 text-navy-950 font-black text-sm rounded-lg hover:bg-gold-300 transition-all duration-200 uppercase tracking-wide"
@@ -778,30 +758,28 @@ export default async function HomePage() {
 
             {/* Right: bank partners card */}
             <AnimatedSection direction="right" delay={0.15}>
-              <div className="bg-navy-900 border border-navy-800 rounded-2xl p-8">
-                <p className="text-xs font-bold tracking-[0.2em] text-gold-400 uppercase mb-6">
+              <div className="bg-navy-900 rounded-2xl p-8">
+                <p className="text-[10px] font-bold tracking-[0.25em] text-gray-500 uppercase mb-7">
                   Banks We Work With
                 </p>
-                <div className="grid grid-cols-2 gap-3 mb-8">
+                <div className="grid grid-cols-2 gap-2 mb-8">
                   {[
                     "Emirates NBD",
                     "Mashreq Bank",
-                    "RAKBANK",
-                    "ADIB",
                     "Wio Bank",
-                    "First Abu Dhabi Bank",
+                    "Emirates Islamic Bank",
+                    "Dubai Islamic Bank",
+                    "FAB",
+                    "Bank Al Masr",
                   ].map((bank) => (
-                    <div key={bank} className="flex items-center gap-2.5 p-3.5 bg-navy-800 rounded-xl border border-navy-700">
-                      <div className="w-1.5 h-1.5 rounded-full bg-gold-400 flex-shrink-0" />
-                      <span className="text-sm text-gray-300 font-medium leading-snug">{bank}</span>
+                    <div key={bank} className="flex items-center p-4 bg-navy-800/60 rounded-xl">
+                      <span className="text-sm text-white font-semibold leading-snug">{bank}</span>
                     </div>
                   ))}
                 </div>
-                <div className="border-t border-navy-700 pt-6">
-                  <p className="text-xs text-gray-500 leading-relaxed">
-                    We prepare complete, tailored documentation packs for every major UAE retail and digital bank, matched to your company structure, licence type and business activity.
-                  </p>
-                </div>
+                <p className="text-[11px] text-gray-600 leading-relaxed">
+                  Final approval is subject to each bank&apos;s own KYC and compliance policies.
+                </p>
               </div>
             </AnimatedSection>
 
@@ -810,15 +788,15 @@ export default async function HomePage() {
       </section>
 
       {/* 8 ── Visa & Residency */}
-      <section className="py-20 bg-white border-t border-gray-100">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-12">
             <p className="text-xs font-bold tracking-[0.25em] text-gold-600 uppercase mb-3">Visa & Residency</p>
             <h2 className="text-3xl sm:text-4xl font-black text-navy-900 uppercase">
-              UAE Residency Visas — All Types, One Firm
+              UAE Residency &amp; Golden Visa Services
             </h2>
             <p className="text-gray-500 mt-4 max-w-2xl mx-auto text-sm leading-relaxed">
-              From the standard investor visa included with your licence to the 10-year Golden Visa — HMA manages the full application, medical, biometrics and Emirates ID in-house.
+              From the standard investor visa included with your licence to the 10-year Golden Visa — we assist clients with the full application, medical, biometrics and Emirates ID process.
             </p>
           </AnimatedSection>
 
@@ -828,10 +806,10 @@ export default async function HomePage() {
                 type: "Investor Visa",
                 duration: "2-Year Residency",
                 Icon: FiUser,
-                description: "For company owners and shareholders. Included with most company formations.",
+                description: "For company owners and shareholders. We assist with applications for most company formations.",
                 features: [
-                  "Included with most formations",
-                  "Medical & Emirates ID",
+                  "Assistance for most formations",
+                  "Medical & Emirates ID support",
                   "Family visa sponsorship eligible",
                   "Renewable every 2 years",
                 ],
@@ -842,26 +820,26 @@ export default async function HomePage() {
                 type: "Golden Visa",
                 duration: "10-Year Residency",
                 Icon: FiAward,
-                description: "Long-term UAE residency for investors, entrepreneurs and qualified professionals.",
+                description: "We assist investors, entrepreneurs and qualified professionals applying for long-term UAE residency.",
                 features: [
-                  "AED 2M+ investment criteria",
+                  "Eligibility assessment included",
                   "Property investors eligible",
                   "No UAE sponsor required",
-                  "Sponsored family visas included",
+                  "Family visa sponsorship support",
                 ],
                 badge: "Premium",
                 featured: true,
               },
               {
-                type: "Employment Visa",
-                duration: "2–3 Year Residency",
+                type: "Family Visa",
+                duration: "Dependent Sponsorship",
                 Icon: FiUsers,
-                description: "For staff and employees of your UAE company. Quota varies by licence type.",
+                description: "We assist with sponsoring your spouse, children and dependents under your UAE residency status.",
                 features: [
-                  "Flexible quota per licence type",
-                  "Medical & Emirates ID",
+                  "Spouse & children sponsorship",
+                  "Medical & Emirates ID support",
                   "Mainland and Free Zone",
-                  "Fast processing available",
+                  "Immigration processing assistance",
                 ],
                 badge: null,
                 featured: false,
@@ -869,10 +847,10 @@ export default async function HomePage() {
             ].map((visa, i) => (
               <AnimatedSection key={visa.type} delay={i * 0.08}>
                 <div
-                  className={`rounded-xl border overflow-hidden h-full flex flex-col transition-all duration-200 hover:shadow-md ${
+                  className={`rounded-xl overflow-hidden h-full flex flex-col transition-all duration-300 hover:shadow-xl ${
                     visa.featured
-                      ? "bg-navy-900 border-gold-400/50"
-                      : "bg-white border-gray-200 hover:border-gold-300"
+                      ? "bg-navy-900 shadow-lg"
+                      : "bg-white shadow-sm"
                   }`}
                 >
                   {visa.featured && <div className="h-1 bg-gold-400" />}
@@ -915,13 +893,13 @@ export default async function HomePage() {
                     </ul>
                     <Link
                       href="/contact?service=visa"
-                      className={`mt-auto flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-bold uppercase tracking-wide transition-all duration-200 ${
+                      className={`mt-auto flex items-center justify-center gap-2 px-4 sm:px-5 py-3 rounded-lg text-xs sm:text-sm font-bold uppercase tracking-wide transition-all duration-200 whitespace-nowrap ${
                         visa.featured
                           ? "bg-gold-400 text-navy-950 hover:bg-gold-300"
                           : "border-2 border-navy-900 text-navy-900 hover:bg-navy-900 hover:text-white"
                       }`}
                     >
-                      Enquire About {visa.type} <FiArrowRight size={13} />
+                      Enquire — {visa.type} <FiArrowRight size={12} />
                     </Link>
                   </div>
                 </div>
@@ -931,15 +909,16 @@ export default async function HomePage() {
 
           <AnimatedSection className="mt-6 text-center">
             <p className="text-xs text-gray-400">
-              All visas include medical examination coordination, biometrics and Emirates ID processing. Timelines are estimates and subject to authority schedules.
+              All visa assistance includes medical examination coordination, biometrics and Emirates ID processing. Approval remains at the discretion of UAE immigration authorities; timelines are estimates subject to authority schedules.
             </p>
           </AnimatedSection>
         </div>
       </section>
 
       {/* 9 ── Stats */}
-      <section className="bg-navy-950 py-14">
+      <section className="bg-navy-950 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-[10px] font-bold tracking-[0.25em] text-gray-600 uppercase text-center mb-10">HMA By The Numbers</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0 md:divide-x md:divide-navy-800">
             {statsData.map((stat, i) => (
               <AnimatedSection key={stat.label} delay={i * 0.1}>
@@ -956,34 +935,41 @@ export default async function HomePage() {
       </section>
 
       {/* 10 ── Why Entrepreneurs Choose HMA */}
-      <section className="py-20 bg-white border-t border-gray-100">
+      <section className="py-24 sm:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-14">
+          <AnimatedSection className="text-center mb-20">
             <p className="text-xs font-bold tracking-[0.25em] text-gold-600 uppercase mb-3">Our Edge</p>
             <h2 className="text-3xl sm:text-4xl font-black text-navy-900 uppercase">
               Why Entrepreneurs Choose HMA
             </h2>
           </AnimatedSection>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {whyUsData.map((item, i) => (
-              <AnimatedSection key={item.title} delay={i * 0.07}>
-                <div className="bg-white rounded-xl border border-gray-100 p-7 hover:border-gold-300 hover:shadow-md transition-all duration-200 h-full">
-                  <div className="w-12 h-12 bg-navy-900 rounded-xl flex items-center justify-center mb-5">
-                    <item.Icon className="text-gold-400" size={20} />
-                  </div>
-                  <h3 className="text-sm font-bold text-navy-900 mb-3 uppercase tracking-wide leading-snug">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{item.description}</p>
+
+          <div className="space-y-16">
+            {whyUsGroups.map((group, gi) => (
+              <div key={group.label}>
+                <AnimatedSection delay={gi * 0.1} className="mb-8">
+                  <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-gray-400">{group.label}</p>
+                  <div className="w-10 h-[2px] bg-gold-400 rounded-full mt-3" />
+                </AnimatedSection>
+                <div className="grid sm:grid-cols-3 gap-x-8 gap-y-10">
+                  {group.items.map((item, i) => (
+                    <AnimatedSection key={item.title} delay={gi * 0.1 + i * 0.07}>
+                      <item.Icon className="text-gold-500 mb-4" size={22} />
+                      <h3 className="text-sm font-bold text-navy-900 mb-2 uppercase tracking-wide leading-snug">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm text-gray-500 leading-relaxed">{item.description}</p>
+                    </AnimatedSection>
+                  ))}
                 </div>
-              </AnimatedSection>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* 11 ── Industries We Cover */}
-      <section className="py-14 bg-gray-50 border-t border-gray-100">
+      <section className="py-14 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-8">
             <h2 className="text-2xl sm:text-3xl font-black text-navy-900 mb-2 uppercase">
@@ -1000,7 +986,7 @@ export default async function HomePage() {
                 return (
                   <div
                     key={ind.label}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-full hover:border-gold-300 hover:bg-gold-50 transition-all duration-200"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-white rounded-full shadow-sm hover:shadow-md hover:bg-gold-50 transition-all duration-200"
                   >
                     <Icon className="text-gold-600 flex-shrink-0" size={13} />
                     <span className="text-sm font-medium text-navy-800 whitespace-nowrap">{ind.label}</span>
@@ -1021,7 +1007,7 @@ export default async function HomePage() {
       </section>
 
       {/* 12 ── Popular UAE Free Zones */}
-      <section className="py-20 bg-white border-t border-gray-100">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-12">
             <p className="text-xs font-bold tracking-[0.25em] text-gold-600 uppercase mb-3">
@@ -1031,7 +1017,7 @@ export default async function HomePage() {
               Popular UAE Free Zones
             </h2>
             <p className="text-gray-500 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-              HMA covers all major UAE free zones. Here are the most popular choices for international entrepreneurs.
+              The most-requested free zones for international entrepreneurs — matched to your business type.
             </p>
           </AnimatedSection>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -1039,30 +1025,29 @@ export default async function HomePage() {
               <AnimatedSection key={zone.name} delay={i * 0.06}>
                 <Link
                   href={`/contact?freezone=${zone.slug}`}
-                  className="group flex flex-col h-full bg-white rounded-xl border border-gray-100 hover:border-gold-300 hover:shadow-md transition-all duration-200 overflow-hidden"
+                  className="group flex flex-col h-full bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden p-7"
                 >
-                  <div className="h-1 bg-gray-100 group-hover:bg-gold-400 transition-colors duration-300" />
-                  <div className="p-6 flex flex-col flex-1">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-2xl font-black text-navy-900 uppercase">{zone.name}</h3>
-                      {zone.tag && (
-                        <span className="text-[9px] font-bold tracking-[0.1em] uppercase px-2 py-1 bg-gold-50 text-gold-700 rounded-full border border-gold-200 flex-shrink-0 ml-2">
-                          {zone.tag}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide mb-3">{zone.full}</p>
-                    <p className="text-sm text-gray-600 leading-relaxed flex-1 mb-5">{zone.benefit}</p>
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                      <div>
-                        <p className="text-[9px] uppercase tracking-wider text-gray-400 font-bold">Starting From</p>
-                        <p className="text-base font-black text-navy-900">{zone.from}</p>
-                      </div>
-                      <span className="text-xs font-bold text-gold-600 group-hover:text-gold-500 flex items-center gap-1 uppercase tracking-wide transition-colors">
-                        Enquire <FiArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                  <div className="flex items-start justify-between mb-5">
+                    <h3 className="text-2xl font-black text-navy-900 uppercase">{zone.name}</h3>
+                    {zone.tag && (
+                      <span className="text-[9px] font-bold tracking-[0.1em] uppercase px-2 py-1 bg-gold-50 text-gold-700 rounded-full flex-shrink-0 ml-2">
+                        {zone.tag}
                       </span>
+                    )}
+                  </div>
+                  <div className="space-y-5 mb-8 flex-1">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1.5">Best For</p>
+                      <p className="text-base font-bold text-navy-900 leading-snug">{zone.bestFor}</p>
+                    </div>
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1.5">Key Advantage</p>
+                      <p className="text-sm text-gray-500 leading-relaxed">{zone.advantage}</p>
                     </div>
                   </div>
+                  <span className="text-xs font-bold text-gold-600 group-hover:text-gold-500 flex items-center gap-1.5 uppercase tracking-widest transition-colors">
+                    Get a Quote <FiArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
+                  </span>
                 </Link>
               </AnimatedSection>
             ))}
@@ -1079,7 +1064,7 @@ export default async function HomePage() {
       </section>
 
       {/* 13 ── Our Services */}
-      <section className="py-20 bg-gray-50 border-t border-gray-100">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-14">
             <h2 className="text-3xl sm:text-4xl font-black text-navy-900 uppercase">Our Services</h2>
@@ -1101,7 +1086,7 @@ export default async function HomePage() {
                   <Link
                     key={svc.label}
                     href={svc.href}
-                    className="group flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-gold-300 hover:shadow-sm transition-all duration-200"
+                    className="group flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
                   >
                     <div className="w-10 h-10 bg-navy-900 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-gold-400 transition-colors duration-200">
                       <svc.icon className="text-gold-400 group-hover:text-navy-950 transition-colors duration-200" size={17} />
@@ -1126,7 +1111,7 @@ export default async function HomePage() {
                   <Link
                     key={svc.label}
                     href={svc.href}
-                    className="group flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-gold-300 hover:shadow-sm transition-all duration-200"
+                    className="group flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
                   >
                     <div className="w-10 h-10 bg-navy-900 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-gold-400 transition-colors duration-200">
                       <svc.icon className="text-gold-400 group-hover:text-navy-950 transition-colors duration-200" size={17} />
@@ -1137,9 +1122,9 @@ export default async function HomePage() {
                 ))}
               </div>
               <div className="p-5 bg-navy-900 rounded-xl">
-                <p className="text-xs font-bold tracking-[0.15em] uppercase text-gold-400 mb-2">The HMA Advantage</p>
+                <p className="text-xs font-bold tracking-[0.15em] uppercase text-gold-400 mb-2">UAE Corporate Tax &amp; VAT Deadlines</p>
                 <p className="text-sm text-gray-300 leading-relaxed">
-                  The same chartered accountants who set up your business also handle your compliance — no knowledge gaps, no handoffs, no costly surprises.
+                  Missed Corporate Tax or VAT registration deadlines carry FTA penalties. Our UAE tax experts track every filing date for you.
                 </p>
               </div>
             </AnimatedSection>
@@ -1233,7 +1218,7 @@ export default async function HomePage() {
 
       {/* 15 ── Client Testimonials */}
       {/* TODO: Replace placeholder content with verified Google Reviews before launch */}
-      <section className="py-20 bg-gray-50 border-t border-gray-100">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-12">
             <p className="text-xs font-bold tracking-[0.25em] text-gold-600 uppercase mb-3">
@@ -1243,7 +1228,7 @@ export default async function HomePage() {
               Trusted By Entrepreneurs Across the UAE
             </h2>
             <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white border border-gray-200 rounded-full shadow-sm">
-              <span className="text-sm font-black text-navy-900">5.0</span>
+              <span className="text-sm font-black text-navy-900">4.9</span>
               <div className="flex items-center gap-0.5">
                 {[...Array(5)].map((_, j) => (
                   <svg key={j} className="w-3.5 h-3.5 text-gold-400 fill-current" viewBox="0 0 20 20">
@@ -1251,7 +1236,7 @@ export default async function HomePage() {
                   </svg>
                 ))}
               </div>
-              <span className="text-xs text-gray-400 font-medium">Google Reviews</span>
+              <span className="text-xs text-gray-400 font-medium">Based on 25 Google Reviews</span>
             </div>
           </AnimatedSection>
 
@@ -1307,19 +1292,18 @@ export default async function HomePage() {
               Free · No Obligation · Response in 1 Hour
             </p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-navy-950 uppercase leading-tight mb-5">
-              Licence. Visas. Banking. Tax.
-              <span className="block mt-1">All From One Firm.</span>
+              Start Your UAE Business With A Team
+              <span className="block mt-1">That Supports You Beyond Your Trade Licence</span>
             </h2>
             <p className="text-navy-900/70 text-base sm:text-lg leading-relaxed max-w-xl mx-auto mb-8">
-              150+ entrepreneurs have launched with HMA. Your consultation is free, takes 30 minutes,
-              and comes with a full cost breakdown — no obligation.
+              From company formation and visas to banking, tax and compliance, HMA supports your entire UAE business journey.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/contact"
                 className="w-full sm:w-auto whitespace-nowrap justify-center inline-flex items-center gap-2 px-8 py-4 bg-navy-950 text-white font-black text-sm rounded-lg hover:bg-navy-900 transition-all duration-200 uppercase tracking-wide"
               >
-                Book Free Consultation
+                Get Free Consultation
                 <FiArrowRight size={14} />
               </Link>
               <a
@@ -1329,7 +1313,7 @@ export default async function HomePage() {
                 className="w-full sm:w-auto whitespace-nowrap justify-center inline-flex items-center gap-2 px-8 py-4 bg-[#25D366] text-white font-bold text-sm rounded-lg hover:bg-[#1ebe5a] transition-all duration-200 uppercase tracking-wide"
               >
                 <FiMessageCircle size={16} />
-                WhatsApp Now
+                WhatsApp An Expert
               </a>
             </div>
             <p className="text-navy-900/40 text-xs mt-6">
@@ -1340,7 +1324,7 @@ export default async function HomePage() {
       </section>
 
       {/* 17 ── Knowledge Hub (Blog) */}
-      <section className="py-20 bg-white border-t border-gray-100">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-12">
             <p className="text-xs font-bold tracking-[0.25em] text-gold-600 uppercase mb-3">
